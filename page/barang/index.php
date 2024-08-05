@@ -20,35 +20,51 @@
                 <thead class="table-secondary">
                     <tr>
                         <th>Nama</th>
+                        <th>Jenis Barang</th>
                         <th>Gambar</th>
                         <th>Harga</th>
                         <th>Stok</th>
+                        <th>Supplier</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $pdo = koneksi::connect();
-                    $sql = 'SELECT * FROM barang';
-                    foreach ($pdo->query($sql) as $row){
+                    $barang = Barang::getInstance($pdo);
+                    $dataBarang = $barang->getAll();
+                    if ($dataBarang && is_array($dataBarang)) {
+                        foreach ($dataBarang as $row) {
                     ?>
-                        <tr>
-                            <td><?php echo $row['nama'] ?></td>
-                            <td><img src="<?php echo $row['gambar'] ?>" alt="" width="100"></td>
-                            <td><?php echo $row['harga'] ?></td>
-                            <td><?php echo $row['stok'] ?></td>
-                            <td>
-                                <a href="index.php?page=barang&act=edit&id_barang=<?php echo $row['id_barang'] ?>" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <a href="index.php?page=barang&act=hapus&id_barang=<?php echo $row['id_barang'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda ingin menghapus data ini?')">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['nama']); ?></td>
+                        <td><?php echo htmlspecialchars($row['nama_jenis_barang']); ?></td>
+                        <td>
+                            <?php
+                            $gambarPath = 'page/barang/img/' . htmlspecialchars($row['gambar']);
+                            if (file_exists($gambarPath)) {
+                                echo '<img src="' . $gambarPath . '" width="180">';
+                            } else {
+                                echo 'Gambar tidak ditemukan';
+                            }
+                            ?>
+                        </td>
+                        <td><?php echo htmlspecialchars($row['harga']); ?></td>
+                        <td><?php echo htmlspecialchars($row['stok']); ?></td>
+                        <td><?php echo htmlspecialchars($row['nama_supplier']); ?></td>
+                        <td>
+                            <a href="index.php?page=barang&act=edit&id_barang=<?php echo htmlspecialchars($row['id_barang']); ?>" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="index.php?page=barang&act=hapus&id_barang=<?php echo htmlspecialchars($row['id_barang']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda ingin menghapus data ini?')">
+                                <i class="fas fa-trash"></i> Hapus
+                            </a>
+                        </td>
+                    </tr>
                     <?php
+                        }
                     }
-                    koneksi::disconnect();
+                    Koneksi::disconnect();
                     ?>
                 </tbody>
             </table>

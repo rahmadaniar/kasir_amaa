@@ -52,23 +52,21 @@
 </html>
 
 
-<?php 
-
-if(isset($_POST['simpan'])){
-
-    $nama = $_POST['nama'];
-    $alamat = $_POST['alamat'];
-    $no_telp = $_POST['no_telp'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $total_poin = $_POST['total_poin'];
+<?php
+if (isset($_POST['simpan'])) {
+    $nama = htmlspecialchars($_POST['nama']);
+    $alamat = htmlspecialchars($_POST['alamat']);
+    $no_telp = htmlspecialchars($_POST['no_telp']);
+    $jenis_kelamin = htmlspecialchars($_POST['jenis_kelamin']);
+    $total_poin = htmlspecialchars($_POST['total_poin']);
 
     $pdo = koneksi::connect();
-    $sql = "INSERT INTO member (nama, alamat, no_telp, jenis_kelamin, total_poin) values (?, ?, ?, ?, ?)";
-    $q = $pdo->prepare($sql);
-    $q->execute(array($nama, $alamat, $no_telp, $jenis_kelamin, $total_poin));
-
-    koneksi::disconnect();
-    echo "<script> window.location.href = 'index.php?page=member' </script> ";
-    exit();
-}
+    $member = member::getInstance($pdo);
+    if ($member->tambah($nama, $alamat, $no_telp, $jenis_kelamin, $total_poin)) {
+    echo "<script>window.location.href = 'index.php?page=member'</script>";
+    } else {
+    echo "Terjadi kesalahan saat menyimpan data.";
+    }
+} 
+        
 ?>

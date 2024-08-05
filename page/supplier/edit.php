@@ -1,47 +1,43 @@
-<?php 
+<?php
+
 
 if (empty($_GET['id_supplier'])) {
-    echo "<script> window.location.href = 'index.php?page=supplier' </script> ";
+    echo "<script>window.location.href = 'index.php?page=supplier'</script>";
     exit();
 }
 
 $id_supplier = $_GET['id_supplier'];
+$pdo = Koneksi::connect();
+$supplier = supplier::getInstance($pdo);
 
 if (isset($_POST['simpan'])) {
+    $nama_supplier = htmlspecialchars($_POST['nama_supplier']);
+    $alamat = htmlspecialchars($_POST['alamat']);
+    $email = htmlspecialchars($_POST['email']);
+    $no_telp = htmlspecialchars($_POST['no_telp']);
+    $no_rekening = htmlspecialchars($_POST['no_rekening']);
 
-    $nama = $_POST['nama'];
-    $alamat = $_POST['alamat'];
-    $email = $_POST['email'];
-    $no_telp = $_POST['no_telp'];
-    $no_rekening = $_POST['no_rekening'];
+    $result = $supplier->edit($id_supplier, $nama_supplier, $alamat, $email, $no_telp, $no_rekening);
 
-    $pdo = koneksi::connect();
-    $sql = "UPDATE supplier SET nama = ?, alamat = ?, email = ?, no_telp = ?, no_rekening = ?  WHERE id_supplier = ?";
-    $q = $pdo->prepare($sql);
-    $q->execute(array($nama, $alamat, $email, $no_telp, $no_rekening, $id_supplier));
-    koneksi::disconnect();
-
-    echo "<script> window.location.href = 'index.php?page=supplier' </script> ";
-    exit();
-} else {
-    $pdo = koneksi::connect();
-    $sql = "SELECT * FROM supplier WHERE id_supplier = ?";
-    $q = $pdo->prepare($sql);
-    $q->execute(array($id_supplier));
-    $data = $q->fetch(PDO::FETCH_ASSOC);
-
-    if (!$data) {
-        echo "<script> window.location.href = 'index.php?page=supplier' </script> ";
+    if ($result) {
+        echo "<script>window.location.href = 'index.php?page=supplier'</script>";
         exit();
+    } else {
+        echo "Terjadi kesalahan saat menyimpan data.";
     }
-
-    $nama = $data['nama'];
-    $alamat = $data['alamat'];
-    $email = $data['email'];
-    $no_telp = $data['no_telp'];
-    $no_rekening = $data['no_rekening'];
-    koneksi::disconnect();
 }
+
+$data = $supplier->getID($id_supplier);
+if (!$data) {
+    echo "<script>window.location.href = 'index.php?page=supplier'</script>";
+    exit();
+}
+
+$nama_supplier = htmlspecialchars($data['nama_supplier']);
+$alamat = htmlspecialchars($data['alamat']);
+$email = htmlspecialchars($data['email']);
+$no_telp = htmlspecialchars($data['no_telp']);
+$no_rekening = htmlspecialchars($data['no_rekening']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,8 +57,8 @@ if (isset($_POST['simpan'])) {
         </div>
         <form action="" method="post">
             <div class="form-group">
-                <label for="nama">Nama</label>
-                <input id="nama" name="nama" type="text" class="form-control" placeholder="Masukkan nama" value="<?php echo htmlspecialchars($nama); ?>" required>
+                <label for="nama_supplier">Nama</label>
+                <input id="nama_supplier" name="nama_supplier" type="text" class="form-control" placeholder="Masukkan nama" value="<?php echo htmlspecialchars($nama_supplier); ?>" required>
             </div>
             <div class="form-group">
                 <label for="alamat">Alamat</label>

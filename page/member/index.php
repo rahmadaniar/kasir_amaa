@@ -27,8 +27,9 @@
                 <tbody>
                     <?php
                     $pdo = koneksi::connect();
-                    $sql = 'SELECT * FROM member';
-                    foreach ($pdo->query($sql) as $row){
+                    $member = member::getInstance($pdo);
+                    $dataMember = $member->getAll();
+                    foreach ($dataMember as $row) {
                     ?>
                         <tr>
                             <td><?php echo ($row['nama']); ?></td>

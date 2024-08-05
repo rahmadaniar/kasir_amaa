@@ -20,6 +20,21 @@
                         <input type="text" name="nama" class="form-control" placeholder="Nama Barang" required>
                     </div>
                     <div class="form-group">
+                        <label>Jenis Barang</label>
+                        <select name="jenis_barang" id="" class="form-control">
+                            <option value="">Pilih Jenis</option>
+                            <?php
+                            $pdo = Koneksi::connect();
+                            $barang = Barang::getInstance($pdo);
+                            ?>
+                            <?php foreach ($barang->getAllJenisBarang() as $jenis) : ?>
+                                <option value="<?= $jenis['id_jenis_barang'] ?>">
+                                    <?= $jenis['nama_jenis_barang'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="formFile">Gambar</label>
                         <input class="form-control" type="file" name="gambar" id="formFile" required>
                     </div>
@@ -30,6 +45,21 @@
                     <div class="form-group">
                         <label>Stok</label>
                         <input type="text" name="stok" class="form-control" placeholder="Stok Barang" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Supplier</label>
+                        <select name="supplier" id="" class="form-control">
+                            <option value="">Pilih Supplier</option>
+                            <?php
+                            $pdo = Koneksi::connect();
+                            $barang = Barang::getInstance($pdo);
+                            ?>
+                            <?php foreach ($barang->getAllSupplier() as $supplier) : ?>
+                                <option value="<?= $supplier['id_supplier'] ?>">
+                                    <?= $supplier['nama_supplier'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
@@ -49,21 +79,33 @@
 
 <?php
 if (isset($_POST['simpan'])) {
-    $nama = $_POST['nama'];
-    $harga = $_POST['harga'];
-    $stok = $_POST['stok'];
+    $nama = htmlspecialchars($_POST['nama']);
+    $jenis_barang = htmlspecialchars($_POST['jenis_barang']);
 
-    // proses untuk kita mengupload gambar
-    $target_dir = "page/barang/img/";
-    $target_file = $target_dir . basename($_FILES["gambar"]["name"]);
-    move_uploaded_file($_FILES["gambar"]["tmp_name"], $target_file);
+    $image = $_FILES["gambar"]["name"];
+    $tmpname = $_FILES["gambar"]["tmp_name"];
+    $error = $_FILES["gambar"]["error"];
 
-    $pdo = koneksi::connect();
-    $sql = "INSERT INTO barang (nama, gambar, harga, stok) VALUES (?, ?, ?, ?)";
-    $q = $pdo->prepare($sql);
-    $q->execute(array($nama, $target_file, $harga, $stok));
+    $stok = htmlspecialchars($_POST['stok']);
+    $harga = htmlspecialchars($_POST['harga']);
+    $supplier = htmlspecialchars($_POST['supplier']);
 
-    koneksi::disconnect();
-    echo "<script> window.location.href = 'index.php?page=barang' </script>";
+    if ($error === UPLOAD_ERR_OK) {
+        $newfilename = uniqid() . "." . pathinfo($image, PATHINFO_EXTENSION);
+        if (move_uploaded_file($tmpname, 'page/barang/img/' . $newfilename)) {
+
+            $pdo = Koneksi::connect();
+            $barang = Barang::getInstance($pdo);
+            if ($barang->add($nama, $jenis_barang, $harga, $stok, $newfilename, $supplier)) {
+                echo "<script>window.location.href = 'index.php?page=barang'</script>";
+            } else {
+                echo "Terjadi kesalahan saat menyimpan data.";
+            }
+        } else {
+            echo "Terjadi kesalahan saat mengunggah gambar.";
+        }
+    } else {
+        echo "Terjadi kesalahan saat mengunggah gambar.";
+    }
 }
 ?>

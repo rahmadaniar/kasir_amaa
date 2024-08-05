@@ -27,11 +27,12 @@
                 <tbody>
                     <?php
                     $pdo = koneksi::connect();
-                    $sql = 'SELECT * FROM supplier';
-                    foreach ($pdo->query($sql) as $row){
+                    $supplier = supplier::getInstance($pdo);
+                    $dataSupplier = $supplier->getAll();
+                    foreach ($dataSupplier as $row) {
                     ?>
                         <tr>
-                            <td><?php echo ($row['nama']); ?></td>
+                            <td><?php echo ($row['nama_supplier']); ?></td>
                             <td><?php echo ($row['alamat']); ?></td>
                             <td><?php echo ($row['email']); ?></td>
                             <td><?php echo ($row['no_telp']); ?></td>

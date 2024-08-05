@@ -47,6 +47,14 @@
 
 
             <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item active">
+                <a class="nav-link" href="index.php?page=user">
+                    <i class="fas fa-user"></i>
+                    <span>User</span></a>
+            </li>
+            
+            <hr class="sidebar-divider">
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
@@ -55,6 +63,7 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="index.php?page=user">User</a>
                         <a class="collapse-item" href="index.php?page=member">Member</a>
                         <a class="collapse-item" href="index.php?page=supplier">Supplier</a>
                     </div>

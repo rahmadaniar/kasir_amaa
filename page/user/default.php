@@ -1,6 +1,6 @@
 <?php
-include_once "database/class/barang.php";
 include_once "database/config.php";
+include_once "database/class/user.php";
 
 
 
@@ -14,6 +14,12 @@ switch ($act) {
         break;
     case 'hapus':
         include 'hapus.php';
+        break;
+    case 'confirm-password':
+        include('confirmPassword.php');
+        break;
+    case 'change-password':
+        include('changePassword.php');
         break;
     default:
         include 'index.php';

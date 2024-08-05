@@ -1,6 +1,6 @@
 <?php
 include_once "database/config.php";
-include_once "database/config.php";
+include_once "database/class/supplier.php";
 
 
 

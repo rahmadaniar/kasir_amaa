@@ -5,8 +5,14 @@
  $id_supplier = $_GET['id_supplier'];
 
  $pdo = koneksi::connect();
- $sql = "DELETE FROM supplier WHERE id_supplier = ?";
- $q = $pdo->prepare($sql);
- $q->execute(array($id_supplier));
+ $supplier = supplier::getInstance($pdo);
+ $result = $supplier->hapus($id_supplier);
  koneksi::disconnect();
- echo "<script> window.location.href = 'index.php?page=supplier' </script> ";
+ 
+ if ($result) {
+     echo "<script>window.location.href = 'index.php?page=supplier';</script>";
+ } else {
+     echo "Terjadi kesalahan saat menghapus data.";
+ }
+ 
+ ?>

@@ -1,11 +1,25 @@
 <?php
 
-if(isset($_GET['page']))
-{
+session_start();
+
+
+if (isset($_GET['page'])) {
     $halaman_get = $_GET['page'];
-}else{
+} else {
     $halaman_get = "";
 }
+
+// if (!isset($_SESSION['user'])) {
+//     if ($halaman_get != 'login') {
+//         header('location: index.php?page=login');
+//     }
+// }
+
+// if (isset($_SESSION['user'])) {
+//     if ($halaman_get == "login" ||  $halaman_get == "register") {
+//         header('Location: index.php?');
+//     }
+// }
 
 switch ($halaman_get) {
     case 'barang':
@@ -43,7 +57,23 @@ switch ($halaman_get) {
         include('layouts/footer.php');
         break;
 
+    case 'user':
+        $title = "Halaman User"; 
+        include('layouts/header.php');
+        include('page/user/default.php');
+        include('layouts/footer.php');
+        break;
     
+    // case 'login':
+    //     $title = "Halaman Login";
+    //     include('page/user/login.php');
+    //     break;    
+
+    //     case 'user':
+    //         $title = "Halaman Login";
+    //         include('page/user/login.php');
+    //         break;      
+
     default:
         # code...
         $title = "Halaman Utama";

@@ -13,8 +13,8 @@
                 <h3 class="mb-4 text-center">Tambah Supplier</h3>
                 <form action="" method="post">
                     <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input type="text" id="nama" name="nama" class="form-control" placeholder="Nama Supplier" required>
+                        <label for="nama_supplier">Nama</label>
+                        <input type="text" id="nama_supplier" name="nama_supplier" class="form-control" placeholder="Nama Supplier" required>
                     </div>
                     <div class="form-group">
                         <label for="alamat">Alamat</label>
@@ -47,23 +47,21 @@
 </body>
 </html>
 
-<?php 
+<?php
+if (isset($_POST['simpan'])) {
+    $nama_supplier = htmlspecialchars($_POST['nama_supplier']);
+    $alamat = htmlspecialchars($_POST['alamat']);
+    $email = htmlspecialchars($_POST['email']);
+    $no_telp = htmlspecialchars($_POST['no_telp']);
+    $no_rekening = htmlspecialchars($_POST['no_rekening']);
 
-if(isset($_POST['simpan'])){
-
-    $nama = $_POST['nama'];
-    $alamat = $_POST['alamat'];
-    $email = $_POST['email'];
-    $no_telp = $_POST['no_telp'];
-    $no_rekening = $_POST['no_rekening'];
-
-    $pdo = koneksi::connect();
-    $sql = "INSERT INTO supplier (nama, alamat, email, no_telp, no_rekening) VALUES (?, ?, ?, ?, ?)";
-    $q = $pdo->prepare($sql);
-    $q->execute(array($nama, $alamat, $email, $no_telp, $no_rekening));
-
-    koneksi::disconnect();
-    echo "<script> window.location.href = 'index.php?page=supplier' </script> ";
-    exit();
-}
+    $pdo = Koneksi::connect();
+    $supplier = Supplier::getInstance($pdo);
+    if ($supplier->tambah($nama_supplier, $alamat, $email, $no_telp, $no_rekening)) {
+    echo "<script>window.location.href = 'index.php?page=supplier'</script>";
+    } else {
+    echo "Terjadi kesalahan saat menyimpan data.";
+    }
+} 
+        
 ?>

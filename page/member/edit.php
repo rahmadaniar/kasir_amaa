@@ -1,48 +1,45 @@
-<?php 
+<?php
+
 
 if (empty($_GET['id_member'])) {
-    echo "<script> window.location.href = 'index.php?page=member' </script> ";
+    echo "<script>window.location.href = 'index.php?page=member'</script>";
     exit();
 }
 
 $id_member = $_GET['id_member'];
+$pdo = koneksi::connect();
+$member = member::getInstance($pdo);
 
 if (isset($_POST['simpan'])) {
+    $nama = htmlspecialchars($_POST['nama']);
+    $alamat = htmlspecialchars($_POST['alamat']);
+    $no_telp = htmlspecialchars($_POST['no_telp']);
+    $jenis_kelamin = htmlspecialchars($_POST['jenis_kelamin']);
+    $total_poin = htmlspecialchars($_POST['total_poin']);
 
-    $nama = $_POST['nama'];
-    $alamat = $_POST['alamat'];
-    $no_telp = $_POST['no_telp'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $total_poin = $_POST['total_poin'];
+    $result = $member->edit($id_member, $nama, $alamat, $no_telp, $jenis_kelamin, $total_poin);
 
-    $pdo = koneksi::connect();
-    $sql = "UPDATE member SET nama = ?, alamat = ?, no_telp = ?, jenis_kelamin = ?, total_poin = ? WHERE id_member = ?";
-    $q = $pdo->prepare($sql);
-    $q->execute(array($nama, $alamat, $no_telp, $jenis_kelamin, $total_poin, $id_member));
-    koneksi::disconnect();
-
-    echo "<script> window.location.href = 'index.php?page=member' </script> ";
-    exit();
-} else {
-    $pdo = koneksi::connect();
-    $sql = "SELECT * FROM member WHERE id_member = ?";
-    $q = $pdo->prepare($sql);
-    $q->execute(array($id_member));
-    $data = $q->fetch(PDO::FETCH_ASSOC);
-
-    if (!$data) {
-        echo "<script> window.location.href = 'index.php?page=member' </script> ";
+    if ($result) {
+        echo "<script>window.location.href = 'index.php?page=member'</script>";
         exit();
+    } else {
+        echo "Terjadi kesalahan saat menyimpan data.";
     }
-
-    $nama = $data['nama'];
-    $alamat = $data['alamat'];
-    $no_telp = $data['no_telp'];
-    $jenis_kelamin = $data['jenis_kelamin'];
-    $total_poin = $data['total_poin'];
-    koneksi::disconnect();
 }
+
+$data = $member->getID($id_member);
+if (!$data) {
+    echo "<script>window.location.href = 'index.php?page=member'</script>";
+    exit();
+}
+
+$nama = htmlspecialchars($data['nama']);
+$alamat = htmlspecialchars($data['alamat']);
+$no_telp = htmlspecialchars($data['no_telp']);
+$jenis_kelamin = htmlspecialchars($data['jenis_kelamin']);
+$total_poin = htmlspecialchars($data['total_poin']);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

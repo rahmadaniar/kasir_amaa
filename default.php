@@ -1,6 +1,9 @@
 <?php
 $pdo = koneksi::connect();
 
+$sqlUser ='SELECT COUNT(*) FROM user';
+$resultUser = $pdo->query($sqlUser);
+$jumlahuser = $resultUser->fetchColumn();
 
 $sqlBarang ='SELECT COUNT(*) FROM barang';
 $resultBarang = $pdo->query($sqlBarang);
@@ -38,7 +41,7 @@ $jumlahtransaksi = $resulttransaksi->fetchColumn();
                 <div class="card border-secondary">
                     <div class="card-body">
                         <h2><a href="index.php?page=user"  class=".text text-secondary">User</a></h2>
-                        0
+                        <?=$jumlahuser ?>
                     </div>
                 </div>
             </div>
