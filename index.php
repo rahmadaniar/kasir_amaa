@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 
@@ -9,17 +8,29 @@ if (isset($_GET['page'])) {
     $halaman_get = "";
 }
 
-// if (!isset($_SESSION['user'])) {
-//     if ($halaman_get != 'login') {
-//         header('location: index.php?page=login');
-//     }
-// }
+if (!isset($_SESSION['user'])) {
+    if ($halaman_get == "register") {
+        // Dibiarkan saja alias diperbolehkan
+    } else if ($halaman_get != "login") {
+        // Memaksakan user masuk ke halaman login
+        header('Location: index.php?page=login');
+        exit();
+    }
+} else {
+    // user udah login otomatis login
+    if ($halaman_get == "login") {
+        // masuk ke dalam index.php alias dashboard
+        header('Location: index.php');
+        exit();
+    }
+}
 
-// if (isset($_SESSION['user'])) {
-//     if ($halaman_get == "login" ||  $halaman_get == "register") {
-//         header('Location: index.php?');
-//     }
-// }
+
+if (isset($_SESSION['user'])) {
+    if ($halaman_get == "login" ||  $halaman_get == "register") {
+        header('Location: index.php?');
+    }
+}
 
 switch ($halaman_get) {
     case 'barang':
@@ -58,21 +69,26 @@ switch ($halaman_get) {
         break;
 
     case 'user':
-        $title = "Halaman User"; 
+        $title = "Halaman user";
         include('layouts/header.php');
         include('page/user/default.php');
         include('layouts/footer.php');
         break;
-    
-    // case 'login':
-    //     $title = "Halaman Login";
-    //     include('page/user/login.php');
-    //     break;    
 
-    //     case 'user':
-    //         $title = "Halaman Login";
-    //         include('page/user/login.php');
-    //         break;      
+    case 'login':
+        $title = "Halaman login";
+        include('page/user/login.php');
+        break;
+
+    case 'logout':
+        include('page/user/logout.php');
+        break;
+
+    case 'register':
+        $title = "Halaman register";
+        include('page/user/register.php');
+        break;
+
 
     default:
         # code...
@@ -82,5 +98,3 @@ switch ($halaman_get) {
         include('layouts/footer.php');
         break;
 }
-
-?>

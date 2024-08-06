@@ -13,11 +13,10 @@ $user = User::getInstance($pdo);
 if (isset($_POST['simpan'])) {
     $nama = htmlspecialchars($_POST['nama']);
     $username = htmlspecialchars($_POST['username']);
-    $password = htmlspecialchars($_POST['password']);
     $email = htmlspecialchars($_POST['email']);
     $role = htmlspecialchars($_POST['role']);
 
-    $result = $user->edit($id_user, $nama, $username, $password, $email, $role);
+    $result = $user->edit($id_user, $nama, $username, $email, $role);
 
     if ($result) {
         echo "<script>window.location.href = 'index.php?page=user'</script>";
@@ -35,7 +34,6 @@ if (!$data) {
 
 $nama = htmlspecialchars($data['nama']);
 $username = htmlspecialchars($data['username']);
-$password = htmlspecialchars($data['password']);
 $email = htmlspecialchars($data['email']);
 $role = htmlspecialchars($data['role']);
 ?>

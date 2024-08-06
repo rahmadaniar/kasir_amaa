@@ -6,6 +6,8 @@ $id_user = $_GET["id_user"];
 
 if (isset($_POST["confirm"])) {
     $password = htmlspecialchars($_POST['password']);
+    
+    error_log("Input password from form: " . $password);
 
     if ($user->confirmPassword($id_user, $password)) {
         echo '<script>
@@ -26,6 +28,7 @@ if (isset($error)) {
     echo '<div class="alert alert-danger">' . $error . '</div>';
 }
 ?>
+
 
 <div class="row">
     <div class="card">

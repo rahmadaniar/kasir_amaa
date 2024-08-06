@@ -1,3 +1,22 @@
+<?php
+if (isset($_POST['login'])) {
+    $username = htmlspecialchars($_POST['username']);
+    $password = htmlspecialchars($_POST['password']);
+
+    require_once 'database/config.php';
+    require_once 'database/class/auth.php';
+
+    $pdo = Koneksi::connect();
+    $auth = Auth::getInstance($pdo);
+    if ($auth->login($username, $password)) {
+        // echo "<script>window.location.href = 'index.php?page=barang'</script>";
+    } else {
+        echo "Terjadi kesalahan saat menyimpan data.";
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,26 +28,23 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>KASIR AMA - Login</title>
+    <title><?= $title ?></title>
 
     <!-- Custom fonts for this template-->
     <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-info">
 
     <div class="container">
 
         <!-- Outer Row -->
         <div class="row justify-content-center">
-
 
             <div class="col-lg-5">
 
@@ -36,21 +52,31 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Selamat datang!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Selamat Datang!</h1>
                                     </div>
-                                    <form class="user">
+                                    <div class="alert">
+                                        <?php if (isset($_GET['message'])) : ?>
+                                            <?php if ($_GET['message'] == "gagal") : ?>
+                                                <div class="alert-danger p-2 rounded">
+                                                    Username atau Password salah!
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if ($_GET['message'] == "sukses") : ?>
+                                                <div class="alert-success p-2 rounded">
+                                                    Logout berhasil!
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                    <form class="user" action="" method="post">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                            <input type="text" name="username" class="form-control form-control-user" id="exampleInputUsername" aria-describedby="usernameHelp" placeholder="Enter username..." required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                            <input type="password" name="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password" required>
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -59,16 +85,15 @@
                                                     Me</label>
                                             </div>
                                         </div>
-                                        <a href="index.php" class="btn btn-primary btn-user btn-block">
+                                        <button type="submit" name="login" class="btn btn-primary btn-user btn-block">
                                             Login
-                                        </a>
+                                        </button>
+
                                     </form>
                                     <hr>
+
                                     <div class="text-center">
-                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
-                                    </div>
-                                    <div class="text-center">
-                                        <a class="small" href="register.html">Create an Account!</a>
+                                        <a href="index.php?page=register">Create One</a>
                                     </div>
                                 </div>
                             </div>

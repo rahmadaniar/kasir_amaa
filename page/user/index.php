@@ -31,9 +31,8 @@
                     <?php
                     $pdo = Koneksi::connect();
                     $user = User::getInstance($pdo);
-                    $dataUser = $user->getData(); // Menggunakan metode getData
-                    if ($dataUser && is_array($dataUser)) {
-                        foreach ($dataUser as $row) {
+                    $dataUser = $user->getAll();
+                    foreach ($dataUser as $row) {
                     ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['nama']); ?></td>
@@ -52,7 +51,7 @@
                     </tr>
                     <?php
                         }
-                    }
+                    
                     Koneksi::disconnect();
                     ?>
                 </tbody>

@@ -16,10 +16,10 @@ switch ($act) {
         include 'hapus.php';
         break;
     case 'confirm-password':
-        include('confirmPassword.php');
+        include 'confirmPassword.php';
         break;
     case 'change-password':
-        include('changePassword.php');
+        include 'changePassword.php';
         break;
     default:
         include 'index.php';

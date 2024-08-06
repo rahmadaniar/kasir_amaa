@@ -1,30 +1,28 @@
 <?php
-$pdo = Koneksi::connect();
+if (empty($_GET['id_user'])) {
+    header("Location: index.php?page=user");
+    exit();
+}
+
+$id_user = $_GET['id_user'];
+$pdo = koneksi::connect();
 $user = User::getInstance($pdo);
 
-$id_user = $_GET["id_user"];
+if (isset($_POST['ganti_password'])) {
+    $new_password = htmlspecialchars($_POST['new_password']);
+    $confirm_password = htmlspecialchars($_POST['confirm_password']);
 
-if (isset($_POST["reset"])) {
-    $password = $_POST["password"];
-
-    if ($user->resetPassword($id_user, $password)) {
-        echo '<script>window.location.href ="index.php?page=user&act=success";</script>';
+    if ($new_password === $confirm_password) {
+        if ($user->updatePassword($id_user, $new_password)) {
+            echo "<script>alert('Password berhasil diubah'); window.location.href = 'index.php?page=user';</script>";
+        } else {
+            echo "Terjadi kesalahan saat mengubah password.";
+        }
     } else {
-        $error = "Password tidak dapat direset.";
+        echo "Password baru tidak sesuai dengan konfirmasi password.";
     }
 }
 ?>
-
-<div class="section-header">
-    <h1>Change Password</h1>
-</div>
-
-<?php
-if (isset($error)) {
-    echo '<div class="alert alert-danger">' . $error . '</div>';
-}
-?>
-
 <div class="row">
     <div class="card">
         <form method="POST">

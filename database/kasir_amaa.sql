@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 25, 2024 at 08:54 AM
+-- Generation Time: Aug 06, 2024 at 05:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `kasir_ama`
+-- Database: `kasir_amaa`
 --
 
 -- --------------------------------------------------------
@@ -33,23 +33,17 @@ CREATE TABLE `barang` (
   `id_supplier` int(11) NOT NULL,
   `nama` varchar(50) NOT NULL,
   `harga` int(11) NOT NULL,
-  `stok` int(11) NOT NULL
+  `stok` int(11) NOT NULL,
+  `gambar` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `barang`
 --
 
-INSERT INTO `barang` (`id_barang`, `id_jenis_barang`, `id_supplier`, `nama`, `harga`, `stok`) VALUES
-(8, 0, 0, 'Bubur ayam', 15000, 9),
-(13, 0, 0, 'mie', 3000, 3449),
-(15, 0, 0, 'pelembab', 100000, 50),
-(17, 0, 0, 'laptop', 12000000, 3),
-(20, 0, 0, 'udang', 45000, 1),
-(24, 0, 0, 'celana', 30000, 2),
-(25, 0, 0, 'baju', 20000, 2),
-(28, 0, 0, 'cumi', 20000, 2),
-(29, 0, 0, 'ikan bandeng', 30000, 99);
+INSERT INTO `barang` (`id_barang`, `id_jenis_barang`, `id_supplier`, `nama`, `harga`, `stok`, `gambar`) VALUES
+(36, 0, 3, 'gacoan', 100000, 11, '66b18e515da51.jpg'),
+(37, 1, 1, 'ga', 15000, 1, '66b18eca0746c.jpg');
 
 -- --------------------------------------------------------
 
@@ -76,6 +70,15 @@ CREATE TABLE `jenis_barang` (
   `nama_jenis_barang` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `jenis_barang`
+--
+
+INSERT INTO `jenis_barang` (`id_jenis_barang`, `nama_jenis_barang`) VALUES
+(1, 'makanan berat'),
+(2, 'snack'),
+(3, 'elekronik');
+
 -- --------------------------------------------------------
 
 --
@@ -99,10 +102,17 @@ CREATE TABLE `member` (
   `id_member` int(11) NOT NULL,
   `nama` varchar(50) NOT NULL,
   `alamat` varchar(50) NOT NULL,
-  `no_telp` int(11) NOT NULL,
+  `no_telp` varchar(20) NOT NULL,
   `jenis_kelamin` enum('perempuan','laki-laki','','') NOT NULL,
   `total_poin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `member`
+--
+
+INSERT INTO `member` (`id_member`, `nama`, `alamat`, `no_telp`, `jenis_kelamin`, `total_poin`) VALUES
+(1, 'daper', 'jl pramuka', '047483647', 'perempuan', 200);
 
 -- --------------------------------------------------------
 
@@ -112,10 +122,10 @@ CREATE TABLE `member` (
 
 CREATE TABLE `supplier` (
   `id_supplier` int(11) NOT NULL,
-  `nama` varchar(50) NOT NULL,
+  `nama_supplier` varchar(50) NOT NULL,
   `alamat` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `no_telp` int(11) NOT NULL,
+  `no_telp` varchar(20) NOT NULL,
   `no_rekening` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -123,10 +133,9 @@ CREATE TABLE `supplier` (
 -- Dumping data for table `supplier`
 --
 
-INSERT INTO `supplier` (`id_supplier`, `nama`, `alamat`, `email`, `no_telp`, `no_rekening`) VALUES
-(1, 'pt. superindo', 'jl sukajadi', 'perindo@gmail.com', 89765324, 1000986434),
-(3, 'pt.indonesia', 'jl sumatera', 'indoraya@gmail.com', 984326789, 2147483647),
-(4, 'aaaa', 'aaaa', 'aaa@gmail.com', 985432209, 10098747);
+INSERT INTO `supplier` (`id_supplier`, `nama_supplier`, `alamat`, `email`, `no_telp`, `no_rekening`) VALUES
+(1, 'pt. superindo', 'jl sukajadi', 'perindo@gmail.com', '089765324', 89765324),
+(3, 'pt.indonesia', 'jl sumatera', 'indoraya@gmail.com', '0984326789', 984326789);
 
 -- --------------------------------------------------------
 
@@ -154,9 +163,7 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`id_transaksi`, `id_user`, `id_member`, `id_cabang`, `id_transaksi_detail`, `kembalian`, `ppn`, `tanggal`, `total_diskon`, `total_transaksi`, `nominal_tunai`, `invoice`) VALUES
-(7, 0, 0, 0, 0, 400000, 0, '2024-07-03', 4000, 40000, 400000, 0),
-(8, 0, 0, 0, 0, 22, 0, '2024-07-04', 20009, 15000, 2000000, 0),
-(9, 0, 0, 0, 0, 11000, 0, '2024-07-09', 0, 90000, 100000, 0);
+(9, 0, 0, 0, 0, 11000, 0, '2024-07-09', 11, 90000, 100000, 0);
 
 -- --------------------------------------------------------
 
@@ -179,11 +186,20 @@ CREATE TABLE `transaksi_detail` (
 
 CREATE TABLE `user` (
   `id_user` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `nama` varchar(30) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `password` varchar(30) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `role` enum('super_admin','admin','kasir','') NOT NULL
+  `role` enum('SuperAdmin','Admin','Kasir') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id_user`, `nama`, `username`, `password`, `email`, `role`) VALUES
+(1, 'rarasirahma', 'rahma', '1', 'rahma@gmail.com', 'SuperAdmin'),
+(2, 'rahi', 'iya', '$2y$10$7cTjhBKH8gye1058PoZGIu7', 'rahmadaniiar@gmail.com', 'SuperAdmin');
 
 --
 -- Indexes for dumped tables
@@ -203,6 +219,12 @@ ALTER TABLE `barang`
 ALTER TABLE `cabang`
   ADD PRIMARY KEY (`id_cabang`),
   ADD KEY `id_kantor_pusat` (`id_kantor_pusat`);
+
+--
+-- Indexes for table `jenis_barang`
+--
+ALTER TABLE `jenis_barang`
+  ADD PRIMARY KEY (`id_jenis_barang`);
 
 --
 -- Indexes for table `kantor_pusat`
@@ -252,13 +274,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `cabang`
 --
 ALTER TABLE `cabang`
   MODIFY `id_cabang` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `jenis_barang`
+--
+ALTER TABLE `jenis_barang`
+  MODIFY `id_jenis_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `kantor_pusat`
@@ -270,7 +298,7 @@ ALTER TABLE `kantor_pusat`
 -- AUTO_INCREMENT for table `member`
 --
 ALTER TABLE `member`
-  MODIFY `id_member` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_member` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `supplier`
@@ -294,7 +322,7 @@ ALTER TABLE `transaksi_detail`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
