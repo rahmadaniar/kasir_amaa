@@ -100,4 +100,3 @@ class Supplier
     }
     // function for menampilkan semua supplier doneee
 }
-?>

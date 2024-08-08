@@ -100,4 +100,3 @@ class Member
     }
     // function for menampilkan semua member doneee
 }
-?>

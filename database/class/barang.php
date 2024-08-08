@@ -19,7 +19,7 @@ class Barang
     }
 
     // function for menambahkan barang dimulaiiiii 
-    public function add($nama, $id_jenis_barang, $harga, $stok, $gambar, $id_supplier)
+    public function tambah($nama, $id_jenis_barang, $harga, $stok, $gambar, $id_supplier)
     {
         try {
             $stmt = $this->db->prepare("INSERT INTO barang (nama, id_jenis_barang, harga, stok, gambar, id_supplier) VALUES (:nama, :id_jenis_barang, :harga, :stok, :gambar, :id_supplier)");
@@ -32,7 +32,7 @@ class Barang
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
-            echo $e->getMessage();  
+            echo $e->getMessage();
             return false;
         }
     }
@@ -52,7 +52,7 @@ class Barang
     // function for tambah barang doneee
 
     // function for mengedit barang dimulaiiiii
-    public function update($id_barang, $nama, $id_jenis_barang, $harga, $stok, $gambar, $id_supplier)
+    public function edit($id_barang, $nama, $id_jenis_barang, $harga, $stok, $gambar, $id_supplier)
     {
         try {
             $stmt = $this->db->prepare("UPDATE barang SET nama = :nama, id_jenis_barang = :id_jenis_barang, harga = :harga, stok = :stok, gambar = :gambar, id_supplier = :id_supplier WHERE id_barang = :id_barang");
@@ -81,7 +81,7 @@ class Barang
     // function for edit barang doneee
 
     // function untuk menghapus barang dimulaiiii
-    public function delete($id_barang)
+    public function hapus($id_barang)
     {
         try {
             $stmt = $this->db->prepare("DELETE FROM barang WHERE id_barang = :id_barang");
@@ -112,34 +112,33 @@ class Barang
             return false;
         }
     }
-    
-        //function for mendapatkan niai semuanya doneee
 
-        public function getAllJenisBarang()
-        {
-            try {
-                $stmt = $this->db->prepare("SELECT * FROM jenis_barang");
-                $stmt->execute();
-                $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $data;
-            } catch (PDOException $e) {
-                echo $e->getMessage();
-                return false;
-            }
-        }
+    //function for mendapatkan niai semuanya doneee
 
-        public function getAllSupplier()
-        {
-            try {
-                $stmt = $this->db->prepare("SELECT * FROM supplier");
-                $stmt->execute();
-                $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $data;
-            } catch (PDOException $e) {
-                echo $e->getMessage();
-                return false;
-            }
+    public function getAllJenisBarang()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT * FROM jenis_barang");
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
         }
+    }
+
+    public function getAllSupplier()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT * FROM supplier");
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
     // FUNCTION GET ALL BARANG END
 }
-?>

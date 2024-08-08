@@ -1,4 +1,6 @@
 <?php
+
+
 if (isset($_POST['login'])) {
     $username = htmlspecialchars($_POST['username']);
     $password = htmlspecialchars($_POST['password']);
@@ -6,7 +8,7 @@ if (isset($_POST['login'])) {
     require_once 'database/config.php';
     require_once 'database/class/auth.php';
 
-    $pdo = Koneksi::connect();
+    $pdo = koneksi::connect();
     $auth = Auth::getInstance($pdo);
     if ($auth->login($username, $password)) {
         // echo "<script>window.location.href = 'index.php?page=barang'</script>";
@@ -28,7 +30,7 @@ if (isset($_POST['login'])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title><?= $title ?></title>
+    <title>Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -73,10 +75,10 @@ if (isset($_POST['login'])) {
                                     </div>
                                     <form class="user" action="" method="post">
                                         <div class="form-group">
-                                            <input type="text" name="username" class="form-control form-control-user" id="exampleInputUsername" aria-describedby="usernameHelp" placeholder="Enter username..." required>
+                                            <input type="text" name="username" class="form-control form-control-user" placeholder="Enter username..." required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password" required>
+                                            <input type="password" name="password" class="form-control form-control-user" placeholder="Password" required>
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -90,9 +92,11 @@ if (isset($_POST['login'])) {
 
                                     </form>
                                     <hr>
-
                                     <div class="text-center">
-                                        <a href="index.php?page=register">Create One</a>
+                                        <a href="index.php?auth=register">Create Account</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="index.php?auth=forgot-password">Forgot Password?</a>
                                     </div>
                                 </div>
                             </div>

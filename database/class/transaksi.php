@@ -19,7 +19,7 @@ class Transaksi
     }
 
     // FUNCTION TAMBAH BARANG START
-    public function tambah($kembalian, $ppn, $tanggal, $total_diskon, $total_transaksi)
+    public function tambah($kembalian, $ppn, $tanggal, $total_diskon, $total_transaksi, $nominal_tunai)
     {
         try {
             $stmt = $this->db->prepare("INSERT INTO supplier (kembalian, ppn, tanggal, total_diskon, total_transaksi, nominal_tunai) VALUES (:kembalian, :ppn, :tanggal, :total_diskon, :total_transaksi, :nominal_tunai)");
@@ -102,4 +102,3 @@ class Transaksi
     }
     // FUNCTION GET ALL BARANG END
 }
-?>

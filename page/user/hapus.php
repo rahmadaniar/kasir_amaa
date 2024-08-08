@@ -6,7 +6,7 @@
 
  $pdo = koneksi::connect();
  $user = User::getInstance($pdo);
- $result = $user->delete($id_user);
+ $result = $user->hapus($id_user);
  koneksi::disconnect();
  
  if ($result) {

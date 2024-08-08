@@ -48,7 +48,7 @@ if (isset($error)) {
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-info btn-lg btn-block" name="confirm">
+                    <button type="submit" name="confirm" class="btn btn-info btn-lg btn-block">
                         Confirm Password
                     </button>
                 </div>

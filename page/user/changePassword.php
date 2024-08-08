@@ -39,7 +39,7 @@ if (isset($_POST['ganti_password'])) {
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-info btn-lg btn-block" name="reset">
+                    <button type="submit" name="ganti_password" class="btn btn-info btn-lg btn-block">
                         Confirm Password
                     </button>
                 </div>
