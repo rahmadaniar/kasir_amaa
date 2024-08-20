@@ -5,19 +5,19 @@
             <form action="" method="post">
                 <div class="form-group">
                     <label for="nama">Nama</label>
-                    <input type="text" id="nama" name="nama" class="form-control" placeholder="Nama Member" required>
+                    <input type="text" id="nama" name="nama" class="form-control" placeholder="Nama Member">
                 </div>
                 <div class="form-group">
                     <label for="alamat">Alamat</label>
-                    <input type="text" id="alamat" name="alamat" class="form-control" placeholder="Alamat Member" required>
+                    <input type="text" id="alamat" name="alamat" class="form-control" placeholder="Alamat Member">
                 </div>
                 <div class="form-group">
                     <label for="no_telp">No Telp</label>
-                    <input type="text" id="no_telp" name="no_telp" class="form-control" placeholder="No Telp Member" required>
+                    <input type="text" id="no_telp" name="no_telp" class="form-control" placeholder="No Telp Member">
                 </div>
                 <div class="form-group">
                     <label for="jenis_kelamin">Jenis Kelamin</label>
-                    <select id="jenis_kelamin" name="jenis_kelamin" class="form-control" required>
+                    <select id="jenis_kelamin" name="jenis_kelamin" class="form-control">
                         <option value="">Pilih Jenis Kelamin</option>
                         <option value="Laki-laki" <?php if (isset($jenis_kelamin) && $jenis_kelamin == 'Laki-laki') echo 'selected'; ?>>Laki-laki</option>
                         <option value="Perempuan" <?php if (isset($jenis_kelamin) && $jenis_kelamin == 'Perempuan') echo 'selected'; ?>>Perempuan</option>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-group">
                     <label for="total_poin">Total Poin</label>
-                    <input type="number" id="total_poin" name="total_poin" class="form-control" placeholder="Total Poin Member" required>
+                    <input type="number" id="total_poin" name="total_poin" class="form-control" placeholder="Total Poin Member">
                 </div>
                 <div class="form-group">
                     <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
@@ -46,14 +46,43 @@ if (isset($_POST['simpan'])) {
     $no_telp = htmlspecialchars($_POST['no_telp']);
     $jenis_kelamin = htmlspecialchars($_POST['jenis_kelamin']);
     $total_poin = htmlspecialchars($_POST['total_poin']);
-
-    $pdo = koneksi::connect();
-    $member = member::getInstance($pdo);
-    if ($member->tambah($nama, $alamat, $no_telp, $jenis_kelamin, $total_poin)) {
-        echo "<script>window.location.href = 'index.php?page=member'</script>";
+    
+    if (empty($nama) || empty($alamat) || empty($no_telp) || empty($jenis_kelamin) || empty($total_poin)) {
+        echo "<script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Kolom Kosong',
+                text: 'Harap mengisi semua kolom yang diperlukan.',
+                confirmButtonText: 'OK'
+            });
+        </script>";
     } else {
-        echo "Terjadi kesalahan saat menyimpan data.";
+        $pdo = koneksi::connect();
+        $member = member::getInstance($pdo);
+        $success = $member->tambah($nama, $alamat, $no_telp, $jenis_kelamin, $total_poin);
+        koneksi::disconnect();
+
+        if ($success) {
+            echo "<script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sukses',
+                    text: 'Member berhasil ditambahkan!',
+                    confirmButtonText: 'OK'
+                }).then(function() {
+                    window.location.href = 'index.php?page=member';
+                });
+            </script>";
+        } else {
+            echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Terjadi kesalahan saat menyimpan data.',
+                    confirmButtonText: 'OK'
+                });
+            </script>";
+        }
     }
 }
-
 ?>

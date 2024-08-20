@@ -1,7 +1,7 @@
 <?php
-include_once "database/config.php";
-include_once "database/class/user.php";
-
+require_once "database/config.php";
+require_once "database/class/user.php";
+require_once "database/class/auth.php";
 
 
 $act = isset($_GET['act']) ? $_GET['act'] : '';

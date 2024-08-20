@@ -7,7 +7,7 @@ if (empty($_GET['id_barang'])) {
 
 $id_barang = $_GET['id_barang'];
 
-$pdo = Koneksi::connect();
+$pdo = koneksi::connect();
 $barang = Barang::getInstance($pdo);
 
 if (isset($_POST['simpan'])) {
@@ -37,7 +37,7 @@ if (isset($_POST['simpan'])) {
     }
 
     if ($result) {
-        echo "<script>window.location.href = 'index.php?page=barang'</script>";
+        echo "<script>window.location.href = 'index.php?page=barang&&edit_success=true'</script>";
         exit();
     } else {
         echo "Terjadi kesalahan saat menyimpan data.";
@@ -58,7 +58,19 @@ $id_supplier = htmlspecialchars($data['id_supplier']);
 $gambar = !empty($data['gambar']) ? "image/" . htmlspecialchars($data['gambar']) : '';
 ?>
 
-
+<?php
+// Tampilkan alert jika edit berhasil
+if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Sukses',
+            text: 'Barang berhasil diedit!',
+            confirmButtonText: 'OK'
+        });
+    </script>";
+}
+?>
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6 offset-md-3">

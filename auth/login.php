@@ -1,29 +1,24 @@
 <?php
+    if (isset($_POST['login'])) {
+        $username = htmlspecialchars($_POST['username']);
+        $password = htmlspecialchars($_POST['password']);
 
-
-if (isset($_POST['login'])) {
-    $username = htmlspecialchars($_POST['username']);
-    $password = htmlspecialchars($_POST['password']);
-
-    require_once 'database/config.php';
-    require_once 'database/class/auth.php';
-
-    $pdo = koneksi::connect();
-    $auth = Auth::getInstance($pdo);
-    if ($auth->login($username, $password)) {
-        // echo "<script>window.location.href = 'index.php?page=barang'</script>";
-    } else {
-        echo "Terjadi kesalahan saat menyimpan data.";
+        $pdo = koneksi::connect();  // Pastikan koneksi ke database
+        $auth = Auth::getInstance($pdo);  // Pastikan instance Auth diinisialisasi
+        if ($auth->login($username, $password)) {
+            header("Location: index.php?auth=login&message=login");
+            exit(); 
+        } else {
+            header("Location: index.php?auth=login&message=error");
+            exit(); 
+        }
     }
-}
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -39,17 +34,17 @@ if (isset($_POST['login'])) {
     <!-- Custom styles for this template-->
     <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
 
+    <!-- SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 </head>
 
 <body class="bg-gradient-info">
 
     <div class="container">
-
         <!-- Outer Row -->
         <div class="row justify-content-center">
-
             <div class="col-lg-5">
-
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
@@ -59,20 +54,6 @@ if (isset($_POST['login'])) {
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Selamat Datang!</h1>
                                     </div>
-                                    <div class="alert">
-                                        <?php if (isset($_GET['message'])) : ?>
-                                            <?php if ($_GET['message'] == "gagal") : ?>
-                                                <div class="alert-danger p-2 rounded">
-                                                    Username atau Password salah!
-                                                </div>
-                                            <?php endif; ?>
-                                            <?php if ($_GET['message'] == "sukses") : ?>
-                                                <div class="alert-success p-2 rounded">
-                                                    Logout berhasil!
-                                                </div>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                    </div>
                                     <form class="user" action="" method="post">
                                         <div class="form-group">
                                             <input type="text" name="username" class="form-control form-control-user" placeholder="Enter username..." required>
@@ -80,16 +61,9 @@ if (isset($_POST['login'])) {
                                         <div class="form-group">
                                             <input type="password" name="password" class="form-control form-control-user" placeholder="Password" required>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember Me</label>
-                                            </div>
-                                        </div>
                                         <button type="submit" name="login" class="btn btn-primary btn-user btn-block">
                                             Login
                                         </button>
-
                                     </form>
                                     <hr>
                                     <div class="text-center">
@@ -103,11 +77,8 @@ if (isset($_POST['login'])) {
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     <!-- Bootstrap core JavaScript-->
@@ -120,6 +91,26 @@ if (isset($_POST['login'])) {
     <!-- Custom scripts for all pages-->
     <script src="assets/js/sb-admin-2.min.js"></script>
 
+    <!-- SweetAlert JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+    <?php if (isset($_GET['message']) && $_GET['message'] == "logout"){ ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Logout Berhasil',
+            text: 'Anda telah berhasil logout!',
+            showConfirmButton: true
+        });
+    <?php } elseif (isset($_GET['message']) && $_GET['message'] == "error"){ ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Login Gagal',
+            text: 'Username atau password salah!',
+            showConfirmButton: true
+        });
+    <?php } ?>
+    </script>
 </body>
 
 </html>

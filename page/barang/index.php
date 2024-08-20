@@ -1,3 +1,16 @@
+<?php
+// Tampilkan alert jika edit berhasil
+if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Sukses',
+            text: 'Barang berhasil diedit!',
+            confirmButtonText: 'OK'
+        });
+    </script>";
+}
+?>
 <div class="container mt-5">
     <div class="d-flex justify-content-between mb-3">
         <h3>Barang</h3>
@@ -45,19 +58,39 @@
                             <td><?php echo htmlspecialchars($row['nama_supplier']); ?></td>
                             <td>
                                 <a href="index.php?page=barang&act=edit&id_barang=<?php echo htmlspecialchars($row['id_barang']); ?>" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i> Edit
+                                    <i class="fas fa-edit"></i> 
                                 </a>
-                                <a href="index.php?page=barang&act=hapus&id_barang=<?php echo htmlspecialchars($row['id_barang']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda ingin menghapus data ini?')">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </a>
+                                <a href="#" class="btn btn-danger btn-sm" onclick="hapus('<?php echo htmlspecialchars($row['id_barang']); ?>'); return false;">
+                                <i class="fas fa-trash"></i> 
+                            </a>
                             </td>
                         </tr>
                 <?php
                     }
                 }
-                Koneksi::disconnect();
+                koneksi::disconnect();
                 ?>
             </tbody>
         </table>
     </div>
 </div>
+
+<script>
+    function hapus(id_barang) {
+        Swal.fire({
+            title: 'Apakah kamu yakin?',
+            text: "Data yang dihapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect ke URL hapus setelah konfirmasi
+                window.location.href = `index.php?page=barang&act=hapus&id_barang=${id_barang}`;
+            }
+        });
+    }
+</script>

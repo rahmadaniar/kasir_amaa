@@ -7,7 +7,7 @@ if (empty($_GET['id_supplier'])) {
 }
 
 $id_supplier = $_GET['id_supplier'];
-$pdo = Koneksi::connect();
+$pdo = koneksi::connect();
 $supplier = supplier::getInstance($pdo);
 
 if (isset($_POST['simpan'])) {
@@ -20,7 +20,7 @@ if (isset($_POST['simpan'])) {
     $result = $supplier->edit($id_supplier, $nama_supplier, $alamat, $email, $no_telp, $no_rekening);
 
     if ($result) {
-        echo "<script>window.location.href = 'index.php?page=supplier'</script>";
+        echo "<script>window.location.href = 'index.php?page=supplier&edit_success=true'</script>";
         exit();
     } else {
         echo "Terjadi kesalahan saat menyimpan data.";
@@ -40,6 +40,22 @@ $no_telp = htmlspecialchars($data['no_telp']);
 $no_rekening = htmlspecialchars($data['no_rekening']);
 ?>
 
+<?php
+if ($_SESSION['user']['role'] == "Kasir") {
+    echo "<script>window.location.href = 'index.php'</script>";
+}
+// Tampilkan alert jika edit berhasil
+if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Sukses',
+            text: 'Supplier berhasil diedit!',
+            confirmButtonText: 'OK'
+        });
+    </script>";
+}
+?>
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6 offset-md-3">

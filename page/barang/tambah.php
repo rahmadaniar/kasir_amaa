@@ -5,14 +5,14 @@
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Nama</label>
-                    <input type="text" name="nama" class="form-control" placeholder="Nama Barang" required>
+                    <input type="text" name="nama" class="form-control" placeholder="Nama Barang">
                 </div>
                 <div class="form-group">
                     <label>Jenis Barang</label>
                     <select name="jenis_barang" id="" class="form-control">
                         <option value="">Pilih Jenis</option>
                         <?php
-                        $pdo = Koneksi::connect();
+                        $pdo = koneksi::connect();
                         $barang = Barang::getInstance($pdo);
                         ?>
                         <?php foreach ($barang->getAllJenisBarang() as $jenis) : ?>
@@ -24,22 +24,22 @@
                 </div>
                 <div class="form-group">
                     <label for="formFile">Gambar</label>
-                    <input class="form-control" type="file" name="gambar" id="formFile" required>
+                    <input class="form-control" type="file" name="gambar" id="formFile">
                 </div>
                 <div class="form-group">
                     <label>Harga</label>
-                    <input type="text" name="harga" class="form-control" placeholder="Harga Barang" required>
+                    <input type="text" name="harga" class="form-control" placeholder="Harga Barang">
                 </div>
                 <div class="form-group">
                     <label>Stok</label>
-                    <input type="text" name="stok" class="form-control" placeholder="Stok Barang" required>
+                    <input type="text" name="stok" class="form-control" placeholder="Stok Barang">
                 </div>
                 <div class="form-group">
                     <label>Supplier</label>
                     <select name="supplier" id="" class="form-control">
                         <option value="">Pilih Supplier</option>
                         <?php
-                        $pdo = Koneksi::connect();
+                        $pdo = koneksi::connect();
                         $barang = Barang::getInstance($pdo);
                         ?>
                         <?php foreach ($barang->getAllSupplier() as $supplier) : ?>
@@ -63,32 +63,62 @@
 <?php
 if (isset($_POST['simpan'])) {
     $nama = htmlspecialchars($_POST['nama']);
-    $jenis_barang = htmlspecialchars($_POST['jenis_barang']);
-
-    $image = $_FILES["gambar"]["name"];
+    $id_jenis_barang = htmlspecialchars($_POST['jenis_barang']);
+    $harga = htmlspecialchars($_POST['harga']);
+    $stok = htmlspecialchars($_POST['stok']);
+    $gambar = $_FILES["gambar"]["name"];
     $tmpname = $_FILES["gambar"]["tmp_name"];
     $error = $_FILES["gambar"]["error"];
+    $id_supplier = htmlspecialchars($_POST['supplier']);
 
-    $stok = htmlspecialchars($_POST['stok']);
-    $harga = htmlspecialchars($_POST['harga']);
-    $supplier = htmlspecialchars($_POST['supplier']);
-
-    if ($error === UPLOAD_ERR_OK) {
-        $newfilename = uniqid() . "." . pathinfo($image, PATHINFO_EXTENSION);
-        if (move_uploaded_file($tmpname, 'assets/image/' . $newfilename)) {
-
-            $pdo = Koneksi::connect();
-            $barang = Barang::getInstance($pdo);
-            if ($barang->tambah($nama, $jenis_barang, $harga, $stok, $newfilename, $supplier)) {
-                echo "<script>window.location.href = 'index.php?page=barang'</script>";
-            } else {
-                echo "Terjadi kesalahan saat menyimpan data.";
-            }
-        } else {
-            echo "Terjadi kesalahan saat mengunggah gambar.";
-        }
+    if (empty($nama) || empty($id_jenis_barang) || empty($harga) || empty($stok) || empty($gambar) || empty($id_supplier)) {
+        echo "<script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Kolom Kosong',
+                text: 'Harap mengisi semua kolom yang diperlukan.',
+                confirmButtonText: 'OK'
+            });
+        </script>";
     } else {
-        echo "Terjadi kesalahan saat mengunggah gambar.";
+
+        if ($error === UPLOAD_ERR_OK) {
+            $newfilename = uniqid() . "." . pathinfo($gambar, PATHINFO_EXTENSION);
+            if (move_uploaded_file($tmpname, 'assets/image/' . $newfilename)) {
+                $pdo = koneksi::connect();
+                $barang = Barang::getInstance($pdo);
+                if ($barang->tambah($nama, $id_jenis_barang, $harga, $stok, $newfilename, $id_supplier)) {
+                    echo "<script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sukses',
+                    text: 'Barang berhasil ditambahkan!',
+                    confirmButtonText: 'OK'
+                }).then(function() {
+                    window.location.href = 'index.php?page=barang';
+                });
+            </script>";
+                } else {
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan saat menyimpan data.',
+                            confirmButtonText: 'OK'
+                        });
+                    </script>";
+                }
+            } else {
+                echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Terjadi kesalahan saat mengunggah gambar.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>";
+            }
+        }
     }
 }
 ?>

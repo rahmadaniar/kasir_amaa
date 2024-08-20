@@ -13,14 +13,13 @@ $user = User::getInstance($pdo);
 if (isset($_POST['simpan'])) {
     $nama = htmlspecialchars($_POST['nama']);
     $username = htmlspecialchars($_POST['username']);
-    $password = htmlspecialchars($_POST['password']);
     $email = htmlspecialchars($_POST['email']);
     $role = htmlspecialchars($_POST['role']);
 
-    $result = $user->edit($id_user, $nama, $username, $password, $email, $role);
+    $result = $user->edit($id_user, $nama, $username, $email, $role);
 
     if ($result) {
-        echo "<script>window.location.href = 'index.php?page=user'</script>";
+        echo "<script>window.location.href = 'index.php?page=user&edit_success=true'</script>";
         exit();
     } else {
         echo "Terjadi kesalahan saat menyimpan data.";
@@ -39,6 +38,22 @@ $email = htmlspecialchars($data['email']);
 $role = htmlspecialchars($data['role']);
 ?>
 
+<?php
+if ($_SESSION['user']['role'] == "Kasir" || $_SESSION['user']['role'] == "Admin") {
+    echo "<script>window.location.href = 'index.php'</script>";
+}
+// Tampilkan alert jika edit berhasil
+if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Sukses',
+            text: 'User berhasil diedit!',
+            confirmButtonText: 'OK'
+        });
+    </script>";
+}
+?>
 
 <div class="container mt-5">
     <div class="row">

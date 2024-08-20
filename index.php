@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "database/config.php";
 include "database/class/auth.php";
 
@@ -49,6 +50,7 @@ if (!$auth->isLoggedIn()) {
 
 <body>
     <?php include("layouts/header.php"); ?>
+    
     <div class="main-content">
         <section class="section">
 
@@ -87,6 +89,7 @@ if (!$auth->isLoggedIn()) {
                     include('page/dashboard/index.php');
             }
             ?>
+            
         </section>
     </div>
 

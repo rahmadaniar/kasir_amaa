@@ -1,5 +1,5 @@
-<?php
 
+<?php
 
 if (empty($_GET['id_member'])) {
     echo "<script>window.location.href = 'index.php?page=member'</script>";
@@ -8,7 +8,7 @@ if (empty($_GET['id_member'])) {
 
 $id_member = $_GET['id_member'];
 $pdo = koneksi::connect();
-$member = member::getInstance($pdo);
+$member = Member::getInstance($pdo);
 
 if (isset($_POST['simpan'])) {
     $nama = htmlspecialchars($_POST['nama']);
@@ -20,7 +20,7 @@ if (isset($_POST['simpan'])) {
     $result = $member->edit($id_member, $nama, $alamat, $no_telp, $jenis_kelamin, $total_poin);
 
     if ($result) {
-        echo "<script>window.location.href = 'index.php?page=member'</script>";
+        echo "<script>window.location.href = 'index.php?page=member&edit_success=true'</script>";
         exit();
     } else {
         echo "Terjadi kesalahan saat menyimpan data.";
@@ -40,6 +40,19 @@ $jenis_kelamin = htmlspecialchars($data['jenis_kelamin']);
 $total_poin = htmlspecialchars($data['total_poin']);
 ?>
 
+<?php
+// Tampilkan alert jika edit berhasil
+if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Sukses',
+            text: 'Member berhasil diedit!',
+            confirmButtonText: 'OK'
+        });
+    </script>";
+}
+?>
 
 <div class="container mt-5">
     <div class="row">

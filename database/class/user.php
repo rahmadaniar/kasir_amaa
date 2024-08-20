@@ -53,7 +53,7 @@ class User
         }
     }
 
-    public function edit($id_user, $nama, $username, $password, $email, $role)
+    public function edit($id_user, $nama, $username, $email, $role)
     {
         try {
             $stmt = $this->db->prepare("SELECT password FROM user WHERE id_user = :id_user");
@@ -61,17 +61,10 @@ class User
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($password === '') {
-                $hashPassword = $data['password'];
-            } else {
-                $hashPassword = password_hash($password, PASSWORD_DEFAULT);
-            }
-
-            $stmt = $this->db->prepare("UPDATE user SET nama = :nama, username = :username, password = :password, email = :email, role = :role WHERE id_user = :id_user");
+            $stmt = $this->db->prepare("UPDATE user SET nama = :nama, username = :username, email = :email, role = :role WHERE id_user = :id_user");
             $stmt->bindParam(":id_user", $id_user);
             $stmt->bindParam(":nama", $nama);
             $stmt->bindParam(":username", $username);
-            $stmt->bindParam(":password", $hashPassword);
             $stmt->bindParam(":email", $email);
             $stmt->bindParam(":role", $role);
 
@@ -145,4 +138,6 @@ class User
             return false;
         }
     }
+
+    
 }

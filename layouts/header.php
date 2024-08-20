@@ -29,64 +29,90 @@
 
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item active">
-            <a class="nav-link" href="index.php?page=user">
-                <i class="fas fa-user"></i>
-                <span>User</span></a>
-        </li>
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin") : ?>
+            <li class="nav-item active">
+                <a class="nav-link" href="index.php?page=user">
+                    <i class="fas fa-user"></i>
+                    <span>User Management</span></a>
+            </li>
 
-        <hr class="sidebar-divider">
+            <hr class="sidebar-divider">
+        <?php endif; ?>
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-cash-register"></i>
-                <span>Data Kasir</span>
-            </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="index.php?page=user">User</a>
-                    <a class="collapse-item" href="index.php?page=member">Member</a>
-                    <a class="collapse-item" href="index.php?page=supplier">Supplier</a>
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin" || $_SESSION['user']['role'] == "Admin") : ?>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSupplier"
+                    aria-expanded="true" aria-controls="collapseSupplier">
+                    <i class="fas fa-truck"></i>
+                    <span>Data Supplier</span>
+                </a>
+                <div id="collapseSupplier" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="index.php?page=supplier">Supplier</a>
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
+        <?php endif; ?>
+
+
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin" || $_SESSION['user']['role'] == "Admin" || $_SESSION['user']['role'] == "Kasir") : ?>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMember"
+                    aria-expanded="true" aria-controls="collapseMember">
+                    <i class="fas fa-cash-register"></i>
+                    <span>Data Member</span>
+                </a>
+                <div id="collapseMember" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="index.php?page=member">Member</a>
+                    </div>
+                </div>
+            </li>
+        <?php endif; ?>
+
 
         <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-box"></i>
-                <span>Data Barang</span>
-            </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="index.php?page=barang">Barang</a>
-                    <a class="collapse-item" href="index.php?page=jenis_barang">Jenis Barang</a>
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin" || $_SESSION['user']['role'] == "Admin" || $_SESSION['user']['role'] == "Kasir") : ?>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-box"></i>
+                    <span>Data Barang</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="index.php?page=barang">Barang</a>
+                        <a class="collapse-item" href="index.php?page=jenis_barang">Jenis Barang</a>
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
+        <?php endif; ?>
+
 
         <!-- Divider -->
         <hr class="sidebar-divider">
 
+
         <!-- Heading -->
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                aria-expanded="true" aria-controls="collapsePages">
-                <i class="fas fa-credit-card"></i>
-                <span>Data Transaksi</span>
-            </a>
-            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="index.php?page=transaksi">Transaksi</a>
-                    <a class="collapse-item" href="index.php?page=transaksi_detail">Transaksi Detail</a>
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin" || $_SESSION['user']['role'] == "Admin" || $_SESSION['user']['role'] == "Kasir") : ?>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Data Transaksi</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="index.php?page=transaksi">Transaksi</a>
+                        <a class="collapse-item" href="index.php?page=transaksi_detail">Transaksi Detail</a>
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
+        <?php endif; ?>
+
 
         <!-- Nav Item - Charts -->
         <!-- Divider -->
@@ -98,6 +124,11 @@
         </div>
 
         <!-- Sidebar Message -->
+        <div class="sidebar-card d-none d-lg-flex">
+            <img class="sidebar-card-illustration mb-2" src="assets/img/undraw_rocket.svg" alt="...">
+            <p class="text-center mb-2"><strong>Kasir Ama Pro</strong> memudahkan anda untuk berbelanja!</p>
+            <a class="btn btn-success btn-sm" href="http://localhost/kasirku/index.php?page=member">Join member!</a>
+        </div>
 
     </ul>
     <!-- End of Sidebar -->
@@ -195,7 +226,7 @@
                                     </div>
                                     <div>
                                         <div class="small text-gray-500">Januari 30, 2024</div>
-                                        <span class="font-weight-bold">Laporan bulanan kamu sudah bia di download yaa</span>
+                                        <span class="font-weight-bold">Laporan bulanan kamu sudah bisa di download yaa</span>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -206,7 +237,7 @@
                                     </div>
                                     <div>
                                         <div class="small text-gray-500">september 12, 2024</div>
-                                         Belum ada uang masuk nih
+                                        Belum ada uang masuk nih
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -245,8 +276,8 @@
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
-                                        <div class="text-truncate">Mari kita cobaaa!!</div>
-                                        <div class="small text-gray-500">Siska Kohl · 1m</div>
+                                        <div class="text-truncate">Dumb conversation we lose track of time!!</div>
+                                        <div class="small text-gray-500">Nothing-Bruno Major  · 1m</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -256,8 +287,8 @@
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">Udah dengarin lagu baru aku belum </div>
-                                        <div class="small text-gray-500">Bernadya · 1d</div>
+                                        <div class="text-truncate">I don't know who you are </div>
+                                        <div class="small text-gray-500">The Most Beautiful Thing-Bruno Major  · 1d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -267,8 +298,8 @@
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">Kenapa bumi itu bulat</div>
-                                        <div class="small text-gray-500">Dilali · 2d</div>
+                                        <div class="text-truncate">Untungnya, bumi masih berputarr</div>
+                                        <div class="small text-gray-500">Bernadya · 2d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>

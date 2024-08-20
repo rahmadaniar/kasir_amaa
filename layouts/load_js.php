@@ -12,11 +12,15 @@
 
 
     <!-- Page level plugins -->
-    <!-- <script src="assets/vendor/chart.js/Chart.min.js"></script> -->
+    <script src="assets/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <!-- <script src="assets/js/demo/chart-area-demo.js"></script>
-    <script src="assets/js/demo/chart-pie-demo.js"></script> -->
+    <script src="assets/js/demo/chart-area-demo.js"></script>
+    <script src="assets/js/demo/chart-pie-demo.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    
+
     
     <!-- Bootstrap JS and dependencies -->
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

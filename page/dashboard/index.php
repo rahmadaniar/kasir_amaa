@@ -38,6 +38,7 @@ $jumlahtransaksi = $resulttransaksi->fetchColumn();
 
     <div class="row">
 
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin") : ?>
         <div class="col-xl-3 col-md-6 mb-4">
             <a href="index.php?page=user" style="text-decoration: none;">
                 <div class="card border-left-primary shadow h-100 py-2">
@@ -56,7 +57,9 @@ $jumlahtransaksi = $resulttransaksi->fetchColumn();
                 </div>
             </a>
         </div>
+        <?php endif; ?>
 
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin" || $_SESSION['user']['role'] == "Admin"|| $_SESSION['user']['role'] == "Kasir" ) : ?>
         <div class="col-xl-3 col-md-6 mb-4">
             <a href="index.php?page=barang" style="text-decoration: none;">
                 <div class="card border-left-info shadow h-100 py-2">
@@ -75,7 +78,9 @@ $jumlahtransaksi = $resulttransaksi->fetchColumn();
                 </div>
             </a>
         </div>
+        <?php endif; ?>
 
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin" || $_SESSION['user']['role'] == "Admin"|| $_SESSION['user']['role'] == "Kasir" ) : ?>
         <div class="col-xl-3 col-md-6 mb-4">
             <a href="index.php?page=member" style="text-decoration: none;">
                 <div class="card border-left-warning shadow h-100 py-2">
@@ -94,7 +99,9 @@ $jumlahtransaksi = $resulttransaksi->fetchColumn();
                 </div>
             </a>
         </div>
+        <?php endif; ?>
 
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin" || $_SESSION['user']['role'] == "Admin") : ?>
         <div class="col-xl-3 col-md-6 mb-4">
             <a href="index.php?page=supplier" style="text-decoration: none;">
                 <div class="card border-left-success shadow h-100 py-2">
@@ -113,7 +120,9 @@ $jumlahtransaksi = $resulttransaksi->fetchColumn();
                 </div>
             </a>
         </div>
+        <?php endif; ?> 
 
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin" || $_SESSION['user']['role'] == "Admin"|| $_SESSION['user']['role'] == "Kasir" ) : ?>
         <div class="col-xl-3 col-md-6 mb-4">
             <a href="index.php?page=transaksi" style="text-decoration: none;">
                 <div class="card border-left-success shadow h-100 py-2">
@@ -132,7 +141,9 @@ $jumlahtransaksi = $resulttransaksi->fetchColumn();
                 </div>
             </a>
         </div>
+        <?php endif; ?>
 
+        <?php if ($_SESSION['user']['role'] == "SuperAdmin" || $_SESSION['user']['role'] == "Admin" ) : ?>
         <div class="col-xl-3 col-md-6 mb-4">
             <a href="index.php?page=jenis_barang" style="text-decoration: none;">
                 <div class="card border-left-danger shadow h-100 py-2">
@@ -151,6 +162,7 @@ $jumlahtransaksi = $resulttransaksi->fetchColumn();
                 </div>
             </a>
         </div>
+        <?php endif; ?>
     </div>
 
 
@@ -160,9 +172,8 @@ $jumlahtransaksi = $resulttransaksi->fetchColumn();
         <div class="col-xl-8 col-lg-7">
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
-                <div
-                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Ringkasan Pendapatan</h6>
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -193,7 +204,7 @@ $jumlahtransaksi = $resulttransaksi->fetchColumn();
                 <!-- Card Header - Dropdown -->
                 <div
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Sumber Pendapatan</h6>
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -1,4 +1,7 @@
 <?php
-session_start();
-session_destroy();
-header("location:index.php?page=login&message=sukses");
+  $pdo = koneksi::connect();
+  $auth = Auth::getInstance($pdo);
+  
+  if ($auth->logout()) {
+    echo "<script>window.location.href='index.php?auth=login&message=logout'</script>";
+}

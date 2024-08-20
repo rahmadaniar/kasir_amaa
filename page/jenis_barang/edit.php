@@ -17,7 +17,7 @@ if (isset($_POST['simpan'])) {
     $q->execute(array($nama_jenis_barang, $id_jenis_barang));
     koneksi::disconnect();
 
-    echo "<script> window.location.href = 'index.php?page=jenis_barang' </script> ";
+    echo "<script> window.location.href = 'index.php?page=jenis_barang&edit_success=true' </script> ";
     exit();
 } else {
     $pdo = koneksi::connect();
@@ -36,6 +36,19 @@ if (isset($_POST['simpan'])) {
 }
 ?>
 
+<?php
+// Tampilkan alert jika edit berhasil
+if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Sukses',
+            text: 'Jenis barang berhasil diedit!',
+            confirmButtonText: 'OK'
+        });
+    </script>";
+}
+?>
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6 offset-md-3">

@@ -36,8 +36,20 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="index.php?page=logout">Logout</a>
+                <a class="btn btn-danger" href="index.php?page=logout">Logout</a>
             </div>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+ 
+    <?php if (isset($_GET['message']) && $_GET['message'] == "login"){ ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Login Berhasil',
+            text: "Selamat datangg <?= $_SESSION['user']['username'] ?>",
+            showConfirmButton: true
+        });
+    <?php } ?>
+</script>

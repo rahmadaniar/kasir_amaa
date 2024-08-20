@@ -1,3 +1,8 @@
+<?php
+if ($_SESSION['user']['role'] == "Kasir" || $_SESSION['user']['role'] == "Admin") {
+    echo "<script>window.location.href = 'index.php'</script>";
+}
+?>
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6 offset-md-3">
@@ -5,23 +10,23 @@
             <form action="" method="post">
                 <div class="form-group">
                     <label for="nama">Nama Lengkap</label>
-                    <input type="text" id="nama" name="nama" class="form-control" placeholder="Nama Lengkap" required>
+                    <input type="text" id="nama" name="nama" class="form-control" placeholder="Nama Lengkap">
                 </div>
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Username">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="text" id="password" name="password" class="form-control" placeholder="Password" required>
+                    <input type="text" id="password" name="password" class="form-control" placeholder="Password">
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="Email User" required>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email User">
                 </div>
                 <div class="form-group">
                     <label>Role</label>
-                    <select name="role" class="form-control" required>
+                    <select name="role" class="form-control">
                         <option value="SuperAdmin">Super Admin</option>
                         <option value="Admin">Admin</option>
                         <option value="Kasir">Kasir</option>
@@ -47,12 +52,42 @@ if (isset($_POST['simpan'])) {
     $email = htmlspecialchars($_POST['email']);
     $role = htmlspecialchars($_POST['role']);
 
-    $pdo = koneksi::connect();
-    $user = User::getInstance($pdo);
-    if ($user->tambah($nama, $username, $password, $email, $role)) {
-        echo "<script>window.location.href = 'index.php?page=user'</script>";
+    if (empty($nama) || empty($username) || empty($password) || empty($email) || empty($role)) {
+        echo "<script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Kolom Kosong',
+                text: 'Harap mengisi semua kolom yang diperlukan.',
+                confirmButtonText: 'OK'
+            });
+        </script>";
     } else {
-        echo "Terjadi kesalahan saat menyimpan data.";
+
+        $pdo = koneksi::connect();
+        $user = User::getInstance($pdo);
+        $success = $user->tambah($nama, $username, $password, $email, $role);
+
+        if ($success) {
+            echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Sukses',
+                text: 'User berhasil ditambahkan!',
+                confirmButtonText: 'OK'
+            }).then(function() {
+                window.location.href = 'index.php?page=user';
+            });
+        </script>";
+        } else {
+            echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Terjadi kesalahan saat menyimpan data.',
+                confirmButtonText: 'OK'
+            });
+        </script>";
+        }
     }
 }
 

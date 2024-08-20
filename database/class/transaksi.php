@@ -38,11 +38,11 @@ class Transaksi
         }
     }
 
-    public function getID($id_supplier)
+    public function getID($id_transaksi)
     {
         try {
-            $stmt = $this->db->prepare("SELECT * FROM supplier WHERE id_supplier = :id_supplier");
-            $stmt->execute(array(":id_supplier" => $id_supplier));
+            $stmt = $this->db->prepare("SELECT * FROM supplier WHERE id_transaksi = :id_transaksi");
+            $stmt->execute(array(":id_transaksi" => $id_transaksi));
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
             return $data;
         } catch (PDOException $e) {
@@ -53,11 +53,11 @@ class Transaksi
     // FUNCTION TAMBAH BARANG END
 
     // FUNCTION EDIT BARANG START
-    public function edit($id_supplier, $kembalian, $ppn, $tanggal, $total_diskon, $total_transaksi)
+    public function edit($id_transaksi, $kembalian, $ppn, $tanggal, $total_diskon, $total_transaksi)
     {
         try {
-            $stmt = $this->db->prepare("UPDATE supplier SET kembalian = :kembalian, ppn = :ppn, tanggal = :tanggal, total_diskon = :total_diskon,  total_transaksi= :total_transaksi  WHERE id_supplier = :id_supplier");
-            $stmt->bindParam(":id_supplier", $id_supplier);
+            $stmt = $this->db->prepare("UPDATE supplier SET kembalian = :kembalian, ppn = :ppn, tanggal = :tanggal, total_diskon = :total_diskon,  total_transaksi= :total_transaksi  WHERE id_transaksi = :id_transaksi");
+            $stmt->bindParam(":id_transaksi", $id_transaksi);
             $stmt->bindParam(":kembalian", $kembalian);
             $stmt->bindParam(":ppn", $ppn);
             $stmt->bindParam(":tanggal", $tanggal);
@@ -73,11 +73,11 @@ class Transaksi
     // FUNCTION EDIT BARANG END
 
     // FUNCTION DELETE BARANG START
-    public function hapus($id_supplier)
+    public function hapus($id_transaksi)
     {
         try {
-            $stmt = $this->db->prepare("DELETE FROM supplier WHERE id_supplier = :id_supplier");
-            $stmt->bindParam(":id_supplier", $id_supplier);
+            $stmt = $this->db->prepare("DELETE FROM supplier WHERE id_transaksi = :id_transaksi");
+            $stmt->bindParam(":id_transaksi", $id_transaksi);
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
