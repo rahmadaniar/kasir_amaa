@@ -60,7 +60,7 @@ if (isset($_POST['ganti_password'])) {
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <h3 class="text-center">Ganti Password</h3>
+            <h3 class="text-center">Change Password</h3>
             <form action="" method="post">
                 <div class="form-group">
                     <label>Password Baru</label>

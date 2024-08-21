@@ -18,7 +18,7 @@
 <!-- End of Page Wrapper -->
 
 <!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
+<a class="scroll-to-top rounded" href="#">
     <i class="fas fa-angle-up"></i>
 </a>
 
@@ -43,7 +43,6 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
- 
     <?php if (isset($_GET['message']) && $_GET['message'] == "login"){ ?>
         Swal.fire({
             icon: 'success',

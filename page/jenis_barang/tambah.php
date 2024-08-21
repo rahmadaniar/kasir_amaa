@@ -1,23 +1,28 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <h3 class="text-center">Tambah Jenis Barang</h3>
+            <h3 class="mb-4">Tambah Jenis Barang</h3>
             <form action="" method="post">
                 <div class="form-group">
                     <label for="nama_jenis_barang">Nama Jenis Barang</label>
-                    <input type="text" class="form-control" id="nama_jenis_barang" name="nama_jenis_barang" placeholder="Nama Jenis Barang">
+                    <input type="text" id="nama_jenis_barang" name="nama_jenis_barang" class="form-control" placeholder="Nama Jenis Barang">
                 </div>
-                <button type="submit" class="btn btn-primary" name="simpan">Simpan</button>
-                <a href="index.php?page=jenis_barang" class="btn btn-secondary">Kembali</a>
+                <div class="form-group">
+                    <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
+                    <a href="index.php" class="btn btn-secondary">Kembali</a>
+                </div>
             </form>
         </div>
     </div>
 </div>
 
+
+
+
 <?php
 if (isset($_POST['simpan'])) {
-    $nama_jenis_barang = $_POST['nama_jenis_barang'];
-
+    $nama_jenis_barang = htmlspecialchars($_POST['nama_jenis_barang']);
+    
     if (empty($nama_jenis_barang)) {
         echo "<script>
             Swal.fire({
@@ -29,9 +34,8 @@ if (isset($_POST['simpan'])) {
         </script>";
     } else {
         $pdo = koneksi::connect();
-        $sql = "INSERT INTO jenis_barang (nama_jenis_barang) VALUES (?)";
-        $q = $pdo->prepare($sql);
-        $success = $q->execute(array($nama_jenis_barang));
+        $jenis_barang = Jenis_barang::getInstance($pdo);
+        $success = $jenis_barang->tambah($nama_jenis_barang);
         koneksi::disconnect();
 
         if ($success) {
@@ -39,7 +43,7 @@ if (isset($_POST['simpan'])) {
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses',
-                    text: 'Jenis Barang berhasil ditambahkan!',
+                    text: 'Jenis barang berhasil ditambahkan!',
                     confirmButtonText: 'OK'
                 }).then(function() {
                     window.location.href = 'index.php?page=jenis_barang';
@@ -50,7 +54,7 @@ if (isset($_POST['simpan'])) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
-                    text: 'Terjadi kesalahan saat menambahkan jenis barang.',
+                    text: 'Terjadi kesalahan saat menyimpan data.',
                     confirmButtonText: 'OK'
                 });
             </script>";

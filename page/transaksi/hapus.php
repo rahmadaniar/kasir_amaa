@@ -5,8 +5,14 @@
  $id_transaksi = $_GET['id_transaksi'];
 
  $pdo = koneksi::connect();
- $sql = "DELETE FROM transaksi WHERE id_transaksi = ?";
- $q = $pdo->prepare($sql);
- $q->execute(array($id_transaksi));
+ $transaksi = Transaksi::getInstance($pdo);
+ $result = $transaksi->hapus($id_transaksi);
  koneksi::disconnect();
- echo "<script> window.location.href = 'index.php?page=transaksi' </script> ";
+ 
+ if ($result) {
+     echo "<script>window.location.href = 'index.php?page=transaksi';</script>";
+ } else {
+     echo "Terjadi kesalahan saat menghapus data.";
+ }
+ 
+ ?>

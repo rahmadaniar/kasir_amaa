@@ -26,15 +26,18 @@ if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
                     <th>PPN</th>
                     <th>Kembalian</th>
                     <th>Tanggal</th>
+                    <th>Invoice</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <?php
+            <?php
+                // Koneksi ke database dan ambil data Transaksi
                 $pdo = koneksi::connect();
-                $sql = 'SELECT * FROM transaksi';
+                $transaksi = Transaksi::getInstance($pdo);
+                $dataTransaksi = $transaksi->getAll();
                 $no = 1;
-                foreach ($pdo->query($sql) as $row) {
+                foreach ($dataTransaksi as $row) {
                 ?>
                     <tr>
                         <td><?php echo $no++ ?></td>
@@ -44,12 +47,13 @@ if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
                         <td><?php echo ($row['ppn']) ?></td>
                         <td><?php echo ($row['kembalian']) ?></td>
                         <td><?php echo ($row['tanggal']) ?></td>
+                        <td><?php echo ($row['invoice']) ?></td>
                         <td>
                             <a href="index.php?page=transaksi&act=edit&id_transaksi=<?php echo $row['id_transaksi'] ?>" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i> Edit
+                                <i class="fas fa-edit"></i> 
                             </a>
                             <a href="#" class="btn btn-danger btn-sm" onclick="hapus('<?php echo htmlspecialchars($row['id_transaksi']); ?>'); return false;">
-                                <i class="fas fa-trash"></i> Hapus
+                                <i class="fas fa-trash"></i> 
                             </a>
                         </td>
                     </tr>

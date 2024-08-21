@@ -1,6 +1,6 @@
 <?php
 
-class Transaksi
+class Transaksi_detail
 {
     private $db;
     private static $instance = null;
@@ -13,7 +13,7 @@ class Transaksi
     public static function getInstance($pdo)
     {
         if (self::$instance == null) {
-            self::$instance = new Transaksi($pdo);
+            self::$instance = new Transaksi_detail($pdo);
         }
         return self::$instance;
     }

@@ -1,5 +1,5 @@
 <?php
-// Tampilkan alert jika edit berhasil
+// Pengecekan apakah proses edit berhasil
 if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
     echo "<script>
         Swal.fire({
@@ -11,13 +11,13 @@ if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
     </script>";
 }
 ?>
+
 <div class="container mt-5">
     <div class="d-flex justify-content-between mb-3">
         <h3>Jenis Barang</h3>
-        <a href="index.php?page=jenis_barang&act=tambah" class="btn btn-secondary ">Tambah Jenis Barang</a>
+        <a href="index.php?page=jenis_barang&act=tambah" class="btn btn-secondary">Tambah Jenis Barang</a>
     </div>
-
-    <div class="table-responsive">
+    <div>
         <table class="table table-bordered">
             <thead class="table-secondary">
                 <tr>
@@ -29,19 +29,20 @@ if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
             <tbody>
                 <?php
                 $pdo = koneksi::connect();
-                $sql = 'SELECT * FROM jenis_barang';
+                $jenis_barang = Jenis_barang::getInstance($pdo);
+                $dataJenisBarang = $jenis_barang->getAll();
                 $no = 1;
-                foreach ($pdo->query($sql) as $row) {
+                foreach ($dataJenisBarang as $row) {
                 ?>
                     <tr>
-                        <td><?php echo $no++ ?></td>
-                        <td><?php echo $row['nama_jenis_barang'] ?></td>
+                        <td><?php echo $no++; ?></td>
+                        <td><?php echo htmlspecialchars($row['nama_jenis_barang']); ?></td>
                         <td>
-                            <a href="index.php?page=jenis_barang&act=edit&id_jenis_barang=<?php echo $row['id_jenis_barang'] ?>" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i> 
+                            <a href="index.php?page=jenis_barang&act=edit&id_jenis_barang=<?php echo htmlspecialchars($row['id_jenis_barang']); ?>" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i>
                             </a>
                             <a href="#" class="btn btn-danger btn-sm" onclick="hapus('<?php echo htmlspecialchars($row['id_jenis_barang']); ?>'); return false;">
-                                <i class="fas fa-trash"></i> 
+                                <i class="fas fa-trash"></i>
                             </a>
                         </td>
                     </tr>
@@ -52,8 +53,6 @@ if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
             </tbody>
         </table>
     </div>
-</div>
-</div>
 </div>
 
 <script>
@@ -70,7 +69,7 @@ if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
         }).then((result) => {
             if (result.isConfirmed) {
                 // Redirect ke URL hapus setelah konfirmasi
-                window.location.href = `index.php?page=jenis_barang&act=hapus&id_jenis_barang=${id_jenis_barang}`;
+                window.location.href = `index.php?page=jenis_barang&act=hapus&id_jenis_barang=${encodeURIComponent(id_jenis_barang)}`;
             }
         });
     }
