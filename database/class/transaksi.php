@@ -103,4 +103,18 @@ class Transaksi
         }
     }
     // FUNCTION GET ALL BARANG END
+    public function getByTanggal($tanggal)
+{
+    try {
+        $stmt = $this->db->prepare("SELECT * FROM transaksi WHERE tanggal = :tanggal");
+        $stmt->bindParam(":tanggal", $tanggal);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+        return false;
+    }
+}
+
 }
