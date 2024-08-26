@@ -140,7 +140,6 @@ class Barang
             return false;
         }
     }
-
-    
     // FUNCTION GET ALL BARANG END
+    
 }
