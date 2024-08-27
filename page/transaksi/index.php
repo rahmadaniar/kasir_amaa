@@ -65,7 +65,7 @@ $memberUmum = $member->getUmum();
                             <select name="barang" id="barang" class="form-control">
                                 <option value="">-Pilih Barang-</option>
                                 <?php foreach ($barang->getAll() as $row): ?>
-                                    <option data-harga="<?= $row['harga'] ?>" value="<?= $row['id_barang'] ?>"><?= $row['nama'] ?> - Rp. <?= $row['harga'] ?></option>
+                                    <option data-harga="<?= $row['harga'] ?>" value="<?= $row['id_barang'] ?>"><?= $row['nama'] ?>    Rp. <?= $row['harga'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -203,6 +203,7 @@ $memberUmum = $member->getUmum();
 </section>
 
 <script>
+
     document.getElementById('btnTambahBarang').addEventListener('click', function(event) {
         event.preventDefault();
 
@@ -213,7 +214,12 @@ $memberUmum = $member->getUmum();
         var qty = document.getElementById('qty').value;
 
         if (selectedBarangValue === "" || qty === "") {
-            alert("Barang dan qty harus diisi.");
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan',
+                text: 'Barang dan quantity harus diisi.',
+                confirmButtonText: 'OK'
+            });
             return;
         }
 
@@ -274,43 +280,56 @@ $memberUmum = $member->getUmum();
     }
 
     function hitungTotal() {
-        var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
-        var subtotal = 0;
+    var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+    var subtotal = 0;
 
-        for (var i = 0, row; row = table.rows[i]; i++) {
-            var total = parseInt(row.cells[4].innerText.replace('Rp. ', '').replace(/,/g, ''));
-            subtotal += total;
-        }
-
-        var total_diskon = document.getElementById('total_diskon').value ? parseInt(document.getElementById('total_diskon').value) : 0;
-        var subtotalAfterDiskon = subtotal - total_diskon;
-        var ppn = document.getElementById('ppn').value ? parseInt(document.getElementById('ppn').value) : 0;
-        var ppnValue = (ppn / 100) * subtotalAfterDiskon;
-        var totalTransaksi = subtotalAfterDiskon + ppnValue;
-
-        document.getElementById('subtotal').value = subtotal;
-        document.getElementById('total_transaksi').value = totalTransaksi;
-
-        // Update nilai yang ditampilkan pada layar
-        document.getElementById('subtotalDisplay').innerText = `Rp. ${subtotal.toLocaleString()}`;
-
-        let nominal_tunai = document.getElementById('nominal_tunai').value;
-        if (nominal_tunai > totalTransaksi) {
-            document.getElementById('kembalian').value = (nominal_tunai - totalTransaksi);
-        }
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        var total = parseInt(row.cells[4].innerText.replace('Rp. ', '').replace(/,/g, ''));
+        subtotal += total;
     }
+
+    var total_diskon = document.getElementById('total_diskon').value ? parseInt(document.getElementById('total_diskon').value) : 0;
+    var subtotalAfterDiskon = subtotal - total_diskon;
+    var ppn = document.getElementById('ppn').value ? parseInt(document.getElementById('ppn').value) : 0;
+    var ppnValue = (ppn / 100) * subtotalAfterDiskon;
+    var totalTransaksi = subtotalAfterDiskon + ppnValue;
+
+    document.getElementById('subtotal').value = subtotal;
+    document.getElementById('total_transaksi').value = totalTransaksi;
+
+    // Update nilai yang ditampilkan pada layar
+    document.getElementById('subtotalDisplay').innerText = `Rp. ${subtotal.toLocaleString()}`;
+
+    let nominal_tunai = document.getElementById('nominal_tunai').value;
+    
+    // Logika untuk menghitung kembalian, bisa negatif jika nominal tunai kurang dari total transaksi
+    let kembalian = nominal_tunai - totalTransaksi;
+    document.getElementById('kembalian').value = kembalian;
+
+    // Jika ingin menampilkan kembalian di dalam elemen lain (misalnya elemen display di UI), bisa ditambahkan seperti ini:
+    document.getElementById('kembalianDisplay').innerText = `Rp. ${kembalian.toLocaleString()}`;
+}
+
 
     document.getElementById('total_diskon').addEventListener('input', hitungTotal);
     document.getElementById('ppn').addEventListener('input', hitungTotal);
 
-
     document.getElementById('btnProses').addEventListener('click', function(event) {
-        event.preventDefault();
+    event.preventDefault();
 
-        // Pastikan elemen-elemen form tersedia sebelum mengambil nilai
-        // const idBarangElem = document.getElementById('id_barang');
+    let kembalian = document.getElementById('kembalian').value;
+
+    if (kembalian < 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Transaksi Gagal',
+            text: 'Uang anda tidak cukup. Jangan ngutang disini!.',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
         const kasirElem = document.getElementById('kasir');
-        // const idCabangElem = document.getElementById('id_cabang');
         const totalTransaksiElem = document.getElementById('total_transaksi');
         const totalDiskonElem = document.getElementById('total_diskon');
         const nominalTunaiElem = document.getElementById('nominal_tunai');
@@ -321,24 +340,20 @@ $memberUmum = $member->getUmum();
         const idMemberElem = document.getElementById('member');
         const subtotalElem = document.getElementById('subtotal');
 
-        // Ambil nilai dari form transaksi
         const transaksi = {
-            // id_barang: idBarangElem.value,
-            id_user: kasirElem.dataset.kasirid, // Pastikan id kasir tersedia
-            // id_cabang: idCabangElem.value,
+            id_user: kasirElem.dataset.kasirid,
             total_transaksi: totalTransaksiElem.value,
             total_diskon: totalDiskonElem.value,
             nominal_tunai: nominalTunaiElem.value,
             ppn: ppnElem.value,
             kembalian: kembalianElem.value,
             tanggal: tanggalElem.value,
-            invoice: "<?= $kodeNota ?>", // Pastikan kodeNota ini benar
+            invoice: "<?= $kodeNota ?>",
             pesan: pesanElem.value,
             id_member: idMemberElem.value,
             subtotal: subtotalElem.value
         };
 
-        // Ambil nilai dari tabel transaksi_Details
         const transaksiDetails = [];
         const tableRows = document.querySelectorAll('#myTable tbody tr');
         tableRows.forEach(row => {
@@ -351,17 +366,11 @@ $memberUmum = $member->getUmum();
             transaksiDetails.push(detail);
         });
 
-        // Gabungkan data transaksi dan transaksiDetails
         const data = {
             transaksi: transaksi,
             transaksiDetails: transaksiDetails
         };
 
-        console.table(data);
-
-
-
-        // Kirim data ke server menggunakan AJAX
         fetch('page/transaksi/tambah.php', {
                 method: 'POST',
                 headers: {
@@ -371,22 +380,47 @@ $memberUmum = $member->getUmum();
             })
             .then(response => response.json())
             .then(result => {
-                console.log(result); // Tambahkan ini untuk melihat respons lengkap dari server
                 if (result.success) {
-                    alert('Transaksi berhasil disimpan!');
-                    window.location.reload();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sukses',
+                        text: 'Transaksi berhasil disimpan!',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.reload();
+                    });
                 } else {
-                    alert('Gagal menyimpan transaksi: ' + result.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Gagal menyimpan transaksi: ' + result.message,
+                        confirmButtonText: 'OK'
+                    });
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan pada server.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kesalahan',
+                    text: 'Terjadi kesalahan pada server.',
+                    confirmButtonText: 'OK'
+                });
             });
     });
 
     document.getElementById('btnBatalkan').addEventListener('click', function(event) {
         event.preventDefault();
-        location.reload(); // Reload halaman
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah Anda yakin ingin membatalkan transaksi?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, batalkan',
+            cancelButtonText: 'Tidak'
+        }).then(result => {
+            if (result.isConfirmed) {
+                location.reload();
+            }
+        });
     });
 </script>

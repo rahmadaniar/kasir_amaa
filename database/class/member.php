@@ -111,4 +111,18 @@ class Member
             return false;
         }
     }
+    
+    public function tambahPoin($id_member, $total_poin)
+    {
+        try {
+            $stmt = $this->db->prepare("UPDATE member SET total_poin= :total_poin  WHERE id_member = :id_member");
+            $stmt->bindParam(":id_member", $id_member);
+            $stmt->bindParam(":total_poin", $total_poin);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
 }

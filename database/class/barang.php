@@ -141,5 +141,29 @@ class Barang
         }
     }
     // FUNCTION GET ALL BARANG END
-    
+    public function kurangiStok($id_barang, $qty)
+    {
+        try {
+            // Periksa stok sebelum mengurangi
+            $stmt = $this->db->prepare("SELECT stok FROM barang WHERE id_barang = :id_barang");
+            $stmt->execute([':id_barang' => $id_barang]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stok = $result['stok'];
+
+            if ($stok < $qty) {
+                throw new Exception("Stok tidak mencukupi untuk barang dengan ID $id_barang. Stok tersedia hanya: $stok.");
+            }
+
+            // Kurangi stok
+            $stmt = $this->db->prepare("UPDATE barang SET stok = stok - :qty WHERE id_barang = :id_barang");
+            $stmt->execute([
+                ':qty' => $qty,
+                ':id_barang' => $id_barang
+            ]);
+
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }
