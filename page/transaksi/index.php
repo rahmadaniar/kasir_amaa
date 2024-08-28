@@ -309,8 +309,6 @@ $memberUmum = $member->getUmum();
     // Jika ingin menampilkan kembalian di dalam elemen lain (misalnya elemen display di UI), bisa ditambahkan seperti ini:
     document.getElementById('kembalianDisplay').innerText = `Rp. ${kembalian.toLocaleString()}`;
 }
-
-
     document.getElementById('total_diskon').addEventListener('input', hitungTotal);
     document.getElementById('ppn').addEventListener('input', hitungTotal);
 
