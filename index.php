@@ -27,6 +27,7 @@ if (!$auth->isLoggedIn()) {
     }
 } else {
 
+
     if (isset($_GET['page']) && $_GET['page'] === 'logout') {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
@@ -36,73 +37,82 @@ if (!$auth->isLoggedIn()) {
         }
         include('page/user/logout.php');
     } else {
+
+        $cetak = isset($_GET['cetak']) ? $_GET['cetak'] : 'cetak';
+        switch ($cetak) {
+            case 'struk':
+                include 'page/transaksi/cetak_laporan.php';
+            case 'transaksi':
+                include 'page/transaksi/cetak_struk.php';
+        }
+    }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Kasir ama</title>
-    <?php include 'layouts/load_css.php'; ?>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+        <title>Kasir ama</title>
+        <?php include 'layouts/load_css.php'; ?>
+    </head>
 
-<body>
-    <?php include("layouts/header.php"); ?>
-    
-    <div class="main-content">
-        <section class="section">
+    <body>
+        <?php include("layouts/header.php"); ?>
 
-            <?php
-            $page = isset($_GET["page"]) ? $_GET["page"] : 'dashboard';
-            switch ($page) {
-                case 'user':
-                    include('page/user/default.php');
-                    break;
+        <div class="main-content">
+            <section class="section">
 
-                case 'member':
-                    include('page/member/default.php');
-                    break;
+                <?php
+                $page = isset($_GET["page"]) ? $_GET["page"] : 'dashboard';
+                switch ($page) {
+                    case 'user':
+                        include('page/user/default.php');
+                        break;
 
-                case 'barang':
-                    include('page/barang/default.php');
-                    break;
+                    case 'member':
+                        include('page/member/default.php');
+                        break;
 
-                case 'transaksi':
-                    include('page/transaksi/default.php');
-                    break;
+                    case 'barang':
+                        include('page/barang/default.php');
+                        break;
 
-                case 'supplier':
-                    include('page/supplier/default.php');
-                    break;
+                    case 'transaksi':
+                        include('page/transaksi/default.php');
+                        break;
 
-                case 'jenis_barang': 
-                    include('page/jenis_barang/default.php');
-                    break;
+                    case 'supplier':
+                        include('page/supplier/default.php');
+                        break;
 
-                case 'dashboard':
-                    include('page/dashboard/index.php');
-                    break;
+                    case 'jenis_barang':
+                        include('page/jenis_barang/default.php');
+                        break;
 
-                default:
-                    include('page/dashboard/index.php');
-            }
-            ?>
-            
-        </section>
-    </div>
+                    case 'dashboard':
+                        include('page/dashboard/index.php');
+                        break;
 
-    <!-- General JS Scripts -->
-    <?php
-    include 'layouts/footer.php';
-    include("layouts/load_js.php");
-    ?>
-</body>
+                    default:
+                        include('page/dashboard/index.php');
+                }
+                ?>
 
-</html>
+            </section>
+        </div>
+
+        <!-- General JS Scripts -->
+        <?php
+        include 'layouts/footer.php';
+        include("layouts/load_js.php");
+        ?>
+    </body>
+
+    </html>
 
 <?php
-    }
-} // Tutup else statement untuk login check
+}
+// Tutup else statement untuk login check
 ?>

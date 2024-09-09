@@ -43,7 +43,7 @@ class Transaksi
         return $kodeCart;
     }
 
-    public function insertTransaksi($id_user,  $total_transaksi, $total_diskon, $nominal_tunai, $ppn, $kembalian, $tanggal, $invoice, $pesan, $id_member, $subtotal)
+    public function insertTransaksi($id_user, $total_transaksi, $total_diskon, $nominal_tunai, $ppn, $kembalian, $tanggal, $invoice, $pesan, $id_member, $subtotal)
     {
         $query = "INSERT INTO transaksi (id_user, total_transaksi, total_diskon, nominal_tunai, ppn, kembalian, tanggal, invoice, pesan, id_member, subtotal)
               VALUES ( :id_user,  :total_transaksi, :total_diskon, :nominal_tunai, :ppn, :kembalian, :tanggal, :invoice, :pesan, :id_member, :subtotal)";
@@ -79,6 +79,69 @@ class Transaksi
             ':subtotal' => $subtotal
         ]);
     }
+
+
+
+    public function getLaporanPenjualan($tanggal = null)
+    {
+        if ($tanggal) {
+            // Jika tanggal diberikan, tambahkan filter tanggal pada query
+            $stmt = $this->pdo->prepare("SELECT t.*, m.nama as member, u.nama as kasir 
+                                         FROM transaksi t 
+                                         JOIN member m ON t.id_member = m.id_member 
+                                         JOIN user u ON t.id_user = u.id_user
+                                         WHERE DATE(t.tanggal) = :tanggal
+                                         ORDER BY t.tanggal DESC");
+            $stmt->bindParam(':tanggal', $tanggal);
+        } else {
+            // Jika tanggal tidak diberikan, ambil semua data
+            $stmt = $this->pdo->prepare("SELECT t.*, m.nama as member, u.nama as kasir 
+                                         FROM transaksi t 
+                                         JOIN member m ON t.id_member = m.id_member 
+                                         JOIN user u ON t.id_user = u.id_user
+                                         ORDER BY t.tanggal DESC");
+        }
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function hapusTransaksi($id_transaksi)
+    {
+        try {
+            $stmt = $this->pdo->prepare("DELETE FROM transaksi WHERE id_transaksi = :id_transaksi");
+            $stmt->bindParam(":id_transaksi", $id_transaksi);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function getAll()
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT transaksi.*, member.nama, transaksi_detail.id_barang, transaksi_detail.qty, transaksi_detail.harga
+                                         FROM transaksi
+                                         LEFT JOIN member ON member.id_member = transaksi.id_member
+                                         LEFT JOIN transaksi_detail ON transaksi_detail.id_transaksi = transaksi.id_transaksi;");
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
+            // Iterasi untuk mengubah id_barang menjadi nama_barang
+            foreach ($data as &$row) {                
+                // Menambahkan qty dan harga ke dalam hasil
+                $row['qty'] = $row['qty'];
+                $row['harga'] = $row['harga'];
+            }
+    
+            return $data;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
     
 }
