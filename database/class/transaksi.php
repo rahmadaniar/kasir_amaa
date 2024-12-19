@@ -120,28 +120,40 @@ class Transaksi
         }
     }
 
-    public function getAll()
+
+    public function getTransactionById($id_transaksi)
     {
         try {
-            $stmt = $this->pdo->prepare("SELECT transaksi.*, member.nama, transaksi_detail.id_barang, transaksi_detail.qty, transaksi_detail.harga
-                                         FROM transaksi
-                                         LEFT JOIN member ON member.id_member = transaksi.id_member
-                                         LEFT JOIN transaksi_detail ON transaksi_detail.id_transaksi = transaksi.id_transaksi;");
+            $stmt = $this->pdo->prepare("
+                SELECT transaksi.*, 
+                       member.nama AS member_name, 
+                       transaksi_detail.id_barang, 
+                       barang.nama, 
+                       transaksi_detail.qty, 
+                       transaksi_detail.harga, 
+                       (transaksi_detail.qty * transaksi_detail.harga) AS total_harga
+                FROM transaksi
+                LEFT JOIN member ON member.id_member = transaksi.id_member
+                LEFT JOIN transaksi_detail ON transaksi_detail.id_transaksi = transaksi.id_transaksi
+                LEFT JOIN barang ON barang.id_barang = transaksi_detail.id_barang
+                WHERE transaksi.id_transaksi = :id_transaksi
+            ");
+
+            $stmt->bindParam(':id_transaksi', $id_transaksi, PDO::PARAM_INT);
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-            // Iterasi untuk mengubah id_barang menjadi nama_barang
-            foreach ($data as &$row) {                
-                // Menambahkan qty dan harga ke dalam hasil
-                $row['qty'] = $row['qty'];
-                $row['harga'] = $row['harga'];
-            }
-    
+
+            // if (empty($data)) {
+            //     throw new Exception("Transaction not found for ID: $id_transaksi");
+            // }
+
             return $data;
         } catch (PDOException $e) {
+            echo "Database Error: " . $e->getMessage();
+            return false;
+        } catch (Exception $e) {
             echo $e->getMessage();
             return false;
         }
     }
-    
 }

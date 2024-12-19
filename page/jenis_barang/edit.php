@@ -1,4 +1,3 @@
-
 <?php
 
 if (empty($_GET['id_jenis_barang'])) {
@@ -39,7 +38,7 @@ if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
         Swal.fire({
             icon: 'success',
             title: 'Sukses',
-            text: 'jenis_barang berhasil diedit!',
+            text: 'Jenis barang berhasil diedit!',
             confirmButtonText: 'OK'
         });
     </script>";

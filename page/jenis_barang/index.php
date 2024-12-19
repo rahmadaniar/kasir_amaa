@@ -1,5 +1,5 @@
 <?php
-// Pengecekan apakah proses edit berhasil
+// untuk ngecek proses edit sudah berhasil belum
 if (isset($_GET['edit_success']) && $_GET['edit_success'] == 'true') {
     echo "<script>
         Swal.fire({

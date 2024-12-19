@@ -42,8 +42,15 @@ if (!$auth->isLoggedIn()) {
         switch ($cetak) {
             case 'struk':
                 include 'page/transaksi/cetak_laporan.php';
-            case 'transaksi':
+                break;
+            case 'cetak':
                 include 'page/transaksi/cetak_struk.php';
+                break;
+            default:
+                // Redirect or handle unknown cetak values
+                // header('Location: index.php'); // Change 'index.php' to your main page if needed
+                break;
+                // exit;
         }
     }
 ?>
@@ -114,5 +121,4 @@ if (!$auth->isLoggedIn()) {
 
 <?php
 }
-// Tutup else statement untuk login check
 ?>

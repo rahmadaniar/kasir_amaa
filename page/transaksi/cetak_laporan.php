@@ -2,21 +2,16 @@
 require_once "vendor/autoload.php";
 require_once "database/class/transaksi.php";
 
-// Mengatur timezone
-date_default_timezone_set('Asia/Jakarta'); // Ganti dengan timezone yang sesuai
+date_default_timezone_set('Asia/Jakarta'); 
 
-// Inisialisasi mPDF
 $mpdf = new \Mpdf\Mpdf();
 
-// Koneksi ke database
 $pdo = koneksi::connect();
-$tanggal = $_GET['tanggal'] ?? ''; // Mengambil tanggal dari parameter GET
+$tanggal = $_GET['tanggal'] ?? ''; 
 $transaksi = Transaksi::getInstance($pdo);
 
-// Mengambil data transaksi dari database
 $datatransaksi = $transaksi->getLaporanPenjualan($tanggal);
 
-// Memulai pembuatan konten HTML untuk PDF
 $html = '
 <!DOCTYPE html>
 <html lang="en">

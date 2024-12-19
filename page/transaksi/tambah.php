@@ -16,7 +16,7 @@ $barang = Barang::getInstance($pdo);
 $member = Member::getInstance($pdo); 
 
 try {
-    // Mulai transaksi
+    
     $pdo->beginTransaction();
 
     // Simpan transaksi
@@ -73,11 +73,10 @@ try {
         $member->tambahPoin($id_member, $total_poin_baru);
     }
 
-    // Commit transaksi
     $pdo->commit();
 
     // Jika berhasil
-    echo json_encode(['success' => true]);
+    echo json_encode(['success' => true,'id_transaksi'=>$idTransaksi]);
 } catch (Exception $e) {
     // Rollback transaksi jika ada kesalahan
     $pdo->rollBack();

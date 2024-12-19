@@ -71,16 +71,16 @@ if (isset($_POST['register'])) {
                             </div>
                             <form class="user" action="" method="post">
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" name="nama" id="exampleName" placeholder="Nama Lengkap">
+                                    <input type="text" class="form-control form-control-user" name="nama" id="exampleName" placeholder="Nama Lengkap" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" name="username" id="exampleUsername" placeholder="Username">
+                                    <input type="text" class="form-control form-control-user" name="username" id="exampleUsername" placeholder="Username" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" name="email" id="exampleInputEmail" placeholder="Email Address">
+                                    <input type="email" class="form-control form-control-user" name="email" id="exampleInputEmail" placeholder="Email Address" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" class="form-control form-control-user" name="password" id="exampleInputPassword" placeholder="Password">
+                                    <input type="password" class="form-control form-control-user" name="password" id="exampleInputPassword" placeholder="Password" required>
                                 </div>
                                 <div class="form-group">
                                     <select name="role" class="form-control form-control-user">
@@ -147,14 +147,7 @@ if (isset($_POST['register'])) {
                     text: 'Gagal membuat akun!',
                     showConfirmButton: true
                 });";
-            } elseif ($message === 'empty') {
-                echo "Swal.fire({
-                    icon: 'warning',
-                    title: 'Form Tidak Lengkap',
-                    text: 'Harap isi semua kolom sebelum melanjutkan!',
-                    showConfirmButton: true
-                });";
-            }
+            } 
         }
         ?>
     </script>

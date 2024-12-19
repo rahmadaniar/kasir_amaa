@@ -3,16 +3,18 @@ require_once "vendor/autoload.php";
 require_once "database/class/transaksi.php";
 require_once "database/config.php";
 
+// Koneksi ke database
 $pdo = koneksi::connect();
 $transaksi = Transaksi::getInstance($pdo);
+$id_transaksi = isset($_GET['id_transaksi']) ? $_GET['id_transaksi'] : null;
 
-// Ambil data transaksi
-$data_transaksi = $transaksi->getAll();
+$data_transaksi = $transaksi->getTransactionById($id_transaksi); 
 
-// Inisialisasi mPDF
-$mpdf = new \Mpdf\Mpdf();
+$invoice = $transaksi->generateKodeNota();
+if ($data_transaksi) {
+    $mpdf = new \Mpdf\Mpdf();
 
-// Konten HTML untuk struk transaksi
+    
 $html = '
 <!DOCTYPE html>
 <html lang="en">
@@ -22,92 +24,106 @@ $html = '
     <title>Struk Transaksi</title>
     <style>
         body {
-            font-family: "Roboto", sans-serif;
-            font-size: 12px;
+            font-family: "Courier New", monospace;
+            font-size: 10px;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
         }
         .struk {
-            width: 100%;
-            padding: 20px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-        }
-        .struk h1, .struk h2 {
+            width: 240px; 
+            margin: auto;
+            border: 1px dashed #000;
+            padding: 10px;
+            background-color: #f5f5f5; 
+            color: #000; 
             text-align: center;
+        }
+        .header {
+            border-bottom: 1px dashed #000;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            font-size: 14px;
             margin: 0;
         }
-        .struk p {
-            margin: 5px 0;
+        .header p {
+            margin: 3px 0;
         }
-        .table {
+        .details, .footer {
+            text-align: left;
+        }
+        .details table {
             width: 100%;
+            margin: 10px 0;
             border-collapse: collapse;
         }
-        .table th, .table td {
-            padding: 5px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        .table th {
-            background-color: #f2f2f2;
+        .details td {
+            padding: 3px 0; 
         }
         .total {
+            border-top: 1px dashed #000;
+            padding-top: 5px;
             text-align: right;
+            font-size: 12px; 
+            font-weight: bold;
+        }
+        .footer {
+            border-top: 1px dashed #000;
+            padding-top: 5px;
             margin-top: 10px;
+            text-align: center;
+        }
+        .footer p {
+            margin: 3px 0;
         }
     </style>
 </head>
-<body>';
-
-// Looping untuk setiap transaksi
-foreach ($data_transaksi as $transaksi) {
-    $html .= '
+<body>
     <div class="struk">
-        <h1>Kasir Ama</h1>
-        <h2>Struk Transaksi</h2>
+        <div class="header">
+            <h1>KASIRKU</h1>
+            <p>Jl. KH. Ahmad Dahlan No.15</p>
+            <p>Telp: (021) 123-4567</p>
+        </div>
+        <div class="details">
+            <p>ID Transaksi: ' . htmlspecialchars($data_transaksi[0]['id_transaksi']) . '</p>
+            <p>Tanggal: ' . htmlspecialchars($data_transaksi[0]['tanggal']) . '</p>
+            <p>Member: ' . htmlspecialchars($data_transaksi[0]['member_name']) . '</p>
+            <table>
+                <thead>
+                    <tr>
+                        <td>Item</td>
+                        <td style="text-align: center;">Qty</td>
+                        <td style="text-align: right;">Subtotal</td>
+                    </tr>
+                </thead>
+                <tbody>';
 
-        <p><strong>ID Transaksi:</strong> ' . htmlspecialchars($transaksi['id_transaksi']) . '</p>
-        <p><strong>Tanggal:</strong> ' . htmlspecialchars($transaksi['tanggal']) . '</p>
-        <p><strong>Member:</strong> ' . htmlspecialchars($transaksi['nama']) . '</p>
+// Looping untuk setiap detail transaksi
+$total = 0;
+foreach ($data_transaksi as $item) {
+    $subtotal = $item['qty'] * $item['harga'];
+    $total += $subtotal;
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Qty</th>
-                    <th>Harga</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>';
-
-    // Looping untuk setiap detail transaksi
-    $total = 0;
-    foreach ($data_transaksi as $item) {
-        if ($item['id_transaksi'] == $transaksi['id_transaksi']) {
-            $subtotal = $item['qty'] * $item['harga'];
-            $total += $subtotal;
-
-            $html .= '<tr>
-                <td>' . htmlspecialchars($item['id_barang']) . '</td>
-                <td>' . htmlspecialchars($item['qty']) . '</td>
-                <td>Rp ' . number_format($item['harga'], 0, ',', '.') . '</td>
-                <td>Rp ' . number_format($subtotal, 0, ',', '.') . '</td>
+    $html .= '<tr>
+                <td>' . htmlspecialchars($item['nama']) . '</td>
+                <td style="text-align: center;">' . htmlspecialchars($item['qty']) . '</td>
+                <td style="text-align: right;">Rp ' . number_format($subtotal, 0, ',', '.') . '</td>
             </tr>';
-        }
-    }
-
-    $html .= '
-            </tbody>
-        </table>
-
-        <p class="total"><strong>Total:</strong> Rp ' . number_format($total, 0, ',', '.') . '</p>
-        <p style="text-align: center;">Terima Kasih atas Kunjungan Anda!</p>
-    </div>';
 }
 
 $html .= '
+                </tbody>
+            </table>
+            <p class="total">Total: Rp ' . number_format($total, 0, ',', '.') . '</p>
+        </div>
+        <div class="footer">
+            <p>*** Terima Kasih ***</p>
+            <p>Barang yang sudah dibeli</p>
+            <p>tidak dapat dikembalikan.</p>
+        </div>
+    </div>
 </body>
 </html>';
 
@@ -115,5 +131,5 @@ $html .= '
 $mpdf->WriteHTML($html);
 
 // Menampilkan PDF ke browser atau menyimpannya sebagai file
-$mpdf->Output('Struk_Transaksi_' . htmlspecialchars($transaksi['id_transaksi']) . '.pdf', \Mpdf\Output\Destination::INLINE);
-?>
+$mpdf->Output('Struk_Transaksi_' . htmlspecialchars($data_transaksi[0]['id_transaksi']) . '.pdf', \Mpdf\Output\Destination::INLINE);
+}

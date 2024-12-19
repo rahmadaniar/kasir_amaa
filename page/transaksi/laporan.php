@@ -5,7 +5,7 @@ require_once "database/config.php";
 $pdo = koneksi::connect();
 $transaksi = Transaksi::getInstance($pdo);
 
-// Ambil data laporan penjualan yang sudah diurutkan berdasarkan tanggal
+
 $laporan = $transaksi->getLaporanPenjualan();
 ?>
 
